@@ -1,0 +1,78 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.ruoyi.CgPSsxHistory.mapper.CgPSsxHistoryMapper">
+    
+    <resultMap type="CgPSsxHistory" id="CgPSsxHistoryResult">
+        <result property="id"    column="id"    />
+        <result property="name"    column="name"    />
+        <result property="kId"    column="k_id"    />
+        <result property="month"    column="month"    />
+        <result property="fen"    column="fen"    />
+        <result property="createTime"    column="create_time"    />
+    </resultMap>
+
+    <sql id="selectCgPSsxHistoryVo">
+        select id, name, k_id, month, fen, create_time from cg_p_ssx_history
+    </sql>
+
+    <select id="selectCgPSsxHistoryList" parameterType="CgPSsxHistory" resultMap="CgPSsxHistoryResult">
+        <include refid="selectCgPSsxHistoryVo"/>
+        <where>  
+            <if test="name != null  and name != ''"> and name like concat('%', #{name}, '%')</if>
+            <if test="kId != null "> and k_id = #{kId}</if>
+            <if test="month != null "> and month = #{month}</if>
+            <if test="fen != null "> and fen = #{fen}</if>
+        </where>
+        ORDER BY month ASC
+    </select>
+    
+    <select id="selectCgPSsxHistoryById" parameterType="Long" resultMap="CgPSsxHistoryResult">
+        <include refid="selectCgPSsxHistoryVo"/>
+        where id = #{id}
+    </select>
+
+    <insert id="insertCgPSsxHistory" parameterType="CgPSsxHistory">
+        insert into cg_p_ssx_history
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="id != null">id,</if>
+            <if test="name != null">name,</if>
+            <if test="kId != null">k_id,</if>
+            <if test="month != null">month,</if>
+            <if test="fen != null">fen,</if>
+            <if test="createTime != null">create_time,</if>
+         </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="id != null">#{id},</if>
+            <if test="name != null">#{name},</if>
+            <if test="kId != null">#{kId},</if>
+            <if test="month != null">#{month},</if>
+            <if test="fen != null">#{fen},</if>
+            <if test="createTime != null">#{createTime},</if>
+         </trim>
+    </insert>
+
+    <update id="updateCgPSsxHistory" parameterType="CgPSsxHistory">
+        update cg_p_ssx_history
+        <trim prefix="SET" suffixOverrides=",">
+            <if test="name != null">name = #{name},</if>
+            <if test="kId != null">k_id = #{kId},</if>
+            <if test="month != null">month = #{month},</if>
+            <if test="fen != null">fen = #{fen},</if>
+            <if test="createTime != null">create_time = #{createTime},</if>
+        </trim>
+        where id = #{id}
+    </update>
+
+    <delete id="deleteCgPSsxHistoryById" parameterType="Long">
+        delete from cg_p_ssx_history where id = #{id}
+    </delete>
+
+    <delete id="deleteCgPSsxHistoryByIds" parameterType="String">
+        delete from cg_p_ssx_history where id in 
+        <foreach item="id" collection="array" open="(" separator="," close=")">
+            #{id}
+        </foreach>
+    </delete>
+</mapper>

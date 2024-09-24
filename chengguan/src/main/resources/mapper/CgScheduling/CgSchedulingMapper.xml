@@ -1,0 +1,95 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.ruoyi.CgScheduling.mapper.CgSchedulingMapper">
+    
+    <resultMap type="CgScheduling" id="CgSchedulingResult">
+        <result property="id"    column="id"    />
+        <result property="name"    column="name"    />
+        <result property="typeId"    column="type_id"    />
+        <result property="startTime"    column="start_time"    />
+        <result property="startEndTime"    column="start_end_time"    />
+        <result property="endStartTime"    column="end_start_time"    />
+        <result property="endTime"    column="end_time"    />
+        <result property="remark"    column="remark"    />
+        <result property="createTime"    column="create_time"    />
+        <result property="updateTime"    column="update_time"    />
+    </resultMap>
+
+    <sql id="selectCgSchedulingVo">
+        select id, name, type_id, start_time, start_end_time, end_start_time, end_time, remark, create_time, update_time from cg_scheduling
+    </sql>
+
+    <select id="selectCgSchedulingList" parameterType="CgScheduling" resultMap="CgSchedulingResult">
+        <include refid="selectCgSchedulingVo"/>
+        <where>  
+            <if test="name != null  and name != ''"> and name like concat('%', #{name}, '%')</if>
+            <if test="typeId != null "> and type_id = #{typeId}</if>
+            <if test="startTime != null  and startTime != ''"> and start_time = #{startTime}</if>
+            <if test="startEndTime != null  and startEndTime != ''"> and start_end_time = #{startEndTime}</if>
+            <if test="endStartTime != null  and endStartTime != ''"> and end_start_time = #{endStartTime}</if>
+            <if test="endTime != null  and endTime != ''"> and end_time = #{endTime}</if>
+        </where>
+    </select>
+    
+    <select id="selectCgSchedulingById" parameterType="Long" resultMap="CgSchedulingResult">
+        <include refid="selectCgSchedulingVo"/>
+        where id = #{id}
+    </select>
+
+    <insert id="insertCgScheduling" parameterType="CgScheduling">
+        insert into cg_scheduling
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="id != null">id,</if>
+            <if test="name != null">name,</if>
+            <if test="typeId != null">type_id,</if>
+            <if test="startTime != null">start_time,</if>
+            <if test="startEndTime != null">start_end_time,</if>
+            <if test="endStartTime != null">end_start_time,</if>
+            <if test="endTime != null">end_time,</if>
+            <if test="remark != null">remark,</if>
+            <if test="createTime != null">create_time,</if>
+            <if test="updateTime != null">update_time,</if>
+         </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="id != null">#{id},</if>
+            <if test="name != null">#{name},</if>
+            <if test="typeId != null">#{typeId},</if>
+            <if test="startTime != null">#{startTime},</if>
+            <if test="startEndTime != null">#{startEndTime},</if>
+            <if test="endStartTime != null">#{endStartTime},</if>
+            <if test="endTime != null">#{endTime},</if>
+            <if test="remark != null">#{remark},</if>
+            <if test="createTime != null">#{createTime},</if>
+            <if test="updateTime != null">#{updateTime},</if>
+         </trim>
+    </insert>
+
+    <update id="updateCgScheduling" parameterType="CgScheduling">
+        update cg_scheduling
+        <trim prefix="SET" suffixOverrides=",">
+            <if test="name != null">name = #{name},</if>
+            <if test="typeId != null">type_id = #{typeId},</if>
+            <if test="startTime != null">start_time = #{startTime},</if>
+            <if test="startEndTime != null">start_end_time = #{startEndTime},</if>
+            <if test="endStartTime != null">end_start_time = #{endStartTime},</if>
+            <if test="endTime != null">end_time = #{endTime},</if>
+            <if test="remark != null">remark = #{remark},</if>
+            <if test="createTime != null">create_time = #{createTime},</if>
+            <if test="updateTime != null">update_time = #{updateTime},</if>
+        </trim>
+        where id = #{id}
+    </update>
+
+    <delete id="deleteCgSchedulingById" parameterType="Long">
+        delete from cg_scheduling where id = #{id}
+    </delete>
+
+    <delete id="deleteCgSchedulingByIds" parameterType="String">
+        delete from cg_scheduling where id in 
+        <foreach item="id" collection="array" open="(" separator="," close=")">
+            #{id}
+        </foreach>
+    </delete>
+</mapper>

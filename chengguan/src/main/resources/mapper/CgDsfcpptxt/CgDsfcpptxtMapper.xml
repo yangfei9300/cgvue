@@ -1,0 +1,179 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.ruoyi.CgDsfcpptxt.mapper.CgDsfcpptxtMapper">
+    
+    <resultMap type="CgDsfcpptxt" id="CgDsfcpptxtResult">
+        <result property="id"    column="id"    />
+        <result property="code"    column="code"    />
+        <result property="frequency"    column="frequency"    />
+        <result property="upCode"    column="up_code"    />
+        <result property="ssjb"    column="ssjb"    />
+        <result property="cplx"    column="cplx"    />
+        <result property="cpnr"    column="cpnr"    />
+        <result property="ykfz"    column="ykfz"    />
+        <result property="wz"    column="wz"    />
+        <result property="zt"    column="zt"    />
+        <result property="isEmail"    column="is_email"    />
+        <result property="zbsj"    column="zbsj"    />
+        <result property="zgqk"    column="zgqk"    />
+        <result property="zgsj"    column="zgsj"    />
+        <result property="fhsj"    column="fhsj"    />
+        <result property="jasj"    column="jasj"    />
+        <result property="zgqx"    column="zgqx"    />
+        <result property="cgDImgs"    column="cg_d_imgs"    />
+        <result property="cdYImgs"    column="cd_y_imgs"    />
+        <result property="cdYTxt"    column="cd_y_txt"    />
+        <result property="cdJTxt"    column="cd_j_txt"    />
+        <result property="cdJTime"    column="cd_j_time"    />
+        <result property="cgCld"    column="cg_cld"    />
+        <result property="cgClr"    column="cg_clr"    />
+        <result property="createTime"    column="create_time"    />
+        <result property="updateTime"    column="update_time"    />
+    </resultMap>
+
+    <sql id="selectCgDsfcpptxtVo">
+        select id, code, frequency, up_code, ssjb, cplx, cpnr, ykfz, wz, zt, zbsj, zgqk, zgsj, fhsj,
+               jasj, zgqx, cg_d_imgs, cd_y_imgs, cd_y_txt, cd_j_txt, cd_j_time, cg_cld,
+               cg_clr,is_email, create_time, update_time from cg_dsfcpptxt
+    </sql>
+
+    <select id="selectCgDsfcpptxtList" parameterType="CgDsfcpptxt" resultMap="CgDsfcpptxtResult">
+        <include refid="selectCgDsfcpptxtVo"/>
+        <where>  
+            <if test="code != null  and code != ''"> and code = #{code}</if>
+            <if test="frequency != null "> and frequency = #{frequency}</if>
+            <if test="upCode != null  and upCode != ''"> and up_code = #{upCode}</if>
+            <if test="ssjb != null  and ssjb != ''"> and ssjb = #{ssjb}</if>
+            <if test="cplx != null  and cplx != ''"> and cplx = #{cplx}</if>
+            <if test="cpnr != null  and cpnr != ''"> and cpnr = #{cpnr}</if>
+            <if test="wz != null  and wz != ''"> and wz = #{wz}</if>
+            <if test="zt != null  and zt != ''"> and zt = #{zt}</if>
+            <if test="zbsj != null  and zbsj != ''"> and zbsj = #{zbsj}</if>
+            <if test="zgqk != null  and zgqk != ''"> and zgqk = #{zgqk}</if>
+            <if test="zgsj != null  and zgsj != ''"> and zgsj = #{zgsj}</if>
+            <if test="fhsj != null  and fhsj != ''"> and fhsj = #{fhsj}</if>
+
+            <if test="jasj != null  and jasj != ''"> and jasj = #{jasj}</if>
+            <if test="zgqx != null  and zgqx != ''"> and zgqx = #{zgqx}</if>
+            <if test="cgDImgs != null  and cgDImgs != ''"> and cg_d_imgs = #{cgDImgs}</if>
+            <if test="cdYImgs != null  and cdYImgs != ''"> and cd_y_imgs = #{cdYImgs}</if>
+            <if test="cdYTxt != null  and cdYTxt != ''"> and cd_y_txt = #{cdYTxt}</if>
+            <if test="cdJTxt != null  and cdJTxt != ''"> and cd_j_txt = #{cdJTxt}</if>
+            <if test="cdJTime != null "> and cd_j_time = #{cdJTime}</if>
+            <if test="cgCld != null "> and cg_cld = #{cgCld}</if>
+            <if test="cgClr != null "> and cg_clr = #{cgClr}</if>
+            <if test="isEmail != null "> and is_email = #{isEmail}</if>
+        </where>
+    </select>
+    
+    <select id="selectCgDsfcpptxtById" parameterType="Long" resultMap="CgDsfcpptxtResult">
+        <include refid="selectCgDsfcpptxtVo"/>
+        where id = #{id}
+    </select>
+
+    <insert id="insertCgDsfcpptxt" parameterType="CgDsfcpptxt" useGeneratedKeys="true" keyProperty="id">
+        insert into cg_dsfcpptxt
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="code != null">code,</if>
+            <if test="frequency != null">frequency,</if>
+            <if test="upCode != null">up_code,</if>
+            <if test="ssjb != null">ssjb,</if>
+            <if test="cplx != null">cplx,</if>
+            <if test="cpnr != null">cpnr,</if>
+            <if test="ykfz != null">ykfz,</if>
+            <if test="wz != null">wz,</if>
+            <if test="zt != null">zt,</if>
+            <if test="zbsj != null">zbsj,</if>
+            <if test="zgqk != null">zgqk,</if>
+            <if test="zgsj != null">zgsj,</if>
+            <if test="fhsj != null">fhsj,</if>
+            <if test="jasj != null">jasj,</if>
+            <if test="zgqx != null">zgqx,</if>
+            <if test="cgDImgs != null">cg_d_imgs,</if>
+            <if test="cdYImgs != null">cd_y_imgs,</if>
+            <if test="cdYTxt != null">cd_y_txt,</if>
+            <if test="cdJTxt != null">cd_j_txt,</if>
+            <if test="cdJTime != null">cd_j_time,</if>
+            <if test="cgCld != null">cg_cld,</if>
+            <if test="cgClr != null">cg_clr,</if>
+
+            <if test="isEmail != null">is_email,</if>
+            <if test="createTime != null">create_time,</if>
+            <if test="updateTime != null">update_time,</if>
+         </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="code != null">#{code},</if>
+            <if test="frequency != null">#{frequency},</if>
+            <if test="upCode != null">#{upCode},</if>
+            <if test="ssjb != null">#{ssjb},</if>
+            <if test="cplx != null">#{cplx},</if>
+            <if test="cpnr != null">#{cpnr},</if>
+            <if test="ykfz != null">#{ykfz},</if>
+            <if test="wz != null">#{wz},</if>
+            <if test="zt != null">#{zt},</if>
+            <if test="zbsj != null">#{zbsj},</if>
+            <if test="zgqk != null">#{zgqk},</if>
+            <if test="zgsj != null">#{zgsj},</if>
+            <if test="fhsj != null">#{fhsj},</if>
+            <if test="jasj != null">#{jasj},</if>
+            <if test="zgqx != null">#{zgqx},</if>
+            <if test="cgDImgs != null">#{cgDImgs},</if>
+            <if test="cdYImgs != null">#{cdYImgs},</if>
+            <if test="cdYTxt != null">#{cdYTxt},</if>
+            <if test="cdJTxt != null">#{cdJTxt},</if>
+            <if test="cdJTime != null">#{cdJTime},</if>
+            <if test="cgCld != null">#{cgCld},</if>
+            <if test="cgClr != null">#{cgClr},</if>
+
+            <if test="isEmail != null">#{isEmail},</if>
+            <if test="createTime != null">#{createTime},</if>
+            <if test="updateTime != null">#{updateTime},</if>
+         </trim>
+    </insert>
+
+    <update id="updateCgDsfcpptxt" parameterType="CgDsfcpptxt">
+        update cg_dsfcpptxt
+        <trim prefix="SET" suffixOverrides=",">
+            <if test="code != null">code = #{code},</if>
+            <if test="frequency != null">frequency = #{frequency},</if>
+            <if test="upCode != null">up_code = #{upCode},</if>
+            <if test="ssjb != null">ssjb = #{ssjb},</if>
+            <if test="cplx != null">cplx = #{cplx},</if>
+            <if test="cpnr != null">cpnr = #{cpnr},</if>
+            <if test="ykfz != null">ykfz = #{ykfz},</if>
+            <if test="wz != null">wz = #{wz},</if>
+            <if test="zt != null">zt = #{zt},</if>
+            <if test="zbsj != null">zbsj = #{zbsj},</if>
+            <if test="zgqk != null">zgqk = #{zgqk},</if>
+            <if test="zgsj != null">zgsj = #{zgsj},</if>
+            <if test="fhsj != null">fhsj = #{fhsj},</if>
+            <if test="jasj != null">jasj = #{jasj},</if>
+            <if test="zgqx != null">zgqx = #{zgqx},</if>
+            <if test="cgDImgs != null">cg_d_imgs = #{cgDImgs},</if>
+            <if test="cdYImgs != null">cd_y_imgs = #{cdYImgs},</if>
+            <if test="cdYTxt != null">cd_y_txt = #{cdYTxt},</if>
+            <if test="cdJTxt != null">cd_j_txt = #{cdJTxt},</if>
+            <if test="cdJTime != null">cd_j_time = #{cdJTime},</if>
+            <if test="cgCld != null">cg_cld = #{cgCld},</if>
+            <if test="cgClr != null">cg_clr = #{cgClr},</if>
+            <if test="isEmail != null">is_email = #{isEmail},</if>
+
+            <if test="createTime != null">create_time = #{createTime},</if>
+            <if test="updateTime != null">update_time = #{updateTime},</if>
+        </trim>
+        where id = #{id}
+    </update>
+
+    <delete id="deleteCgDsfcpptxtById" parameterType="Long">
+        delete from cg_dsfcpptxt where id = #{id}
+    </delete>
+
+    <delete id="deleteCgDsfcpptxtByIds" parameterType="String">
+        delete from cg_dsfcpptxt where id in 
+        <foreach item="id" collection="array" open="(" separator="," close=")">
+            #{id}
+        </foreach>
+    </delete>
+</mapper>

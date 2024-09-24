@@ -1,0 +1,126 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.ruoyi.CgPositioning.mapper.CgPositioningMapper">
+
+    <resultMap type="CgPositioning" id="CgPositioningResult">
+        <result property="id"    column="id"    />
+        <result property="uId"    column="u_id"    />
+        <result property="lat"    column="lat"    />
+        <result property="lon"    column="lon"    />
+        <result property="country"    column="country"    />
+        <result property="province"    column="province"    />
+        <result property="city"    column="city"    />
+        <result property="district"    column="district"    />
+        <result property="street"    column="street"    />
+        <result property="streetNum"    column="streetNum"    />
+        <result property="poiName"    column="poiName"    />
+        <result property="cityCode"    column="cityCode"    />
+        <result property="address"    column="address"    />
+        <result property="isHava"    column="is_hava"    />
+        <result property="createTime"    column="create_time"    />
+        <result property="updateTime"    column="update_time"    />
+    </resultMap>
+
+    <sql id="selectCgPositioningVo">
+        select id, u_id, lat, lon, country, province, city, district, street, streetNum, poiName, cityCode, address, is_hava, create_time, update_time from cg_positioning
+    </sql>
+
+    <select id="selectCgPositioningList" parameterType="CgPositioning" resultMap="CgPositioningResult">
+        <include refid="selectCgPositioningVo"/>
+        <where>
+            <if test="uId != null "> and u_id = #{uId}</if>
+            <if test="lat != null  and lat != ''"> and lat = #{lat}</if>
+            <if test="lon != null  and lon != ''"> and lon = #{lon}</if>
+            <if test="country != null  and country != ''"> and country = #{country}</if>
+            <if test="province != null  and province != ''"> and province = #{province}</if>
+            <if test="city != null  and city != ''"> and city = #{city}</if>
+            <if test="district != null  and district != ''"> and district = #{district}</if>
+            <if test="street != null  and street != ''"> and street = #{street}</if>
+            <if test="streetNum != null  and streetNum != ''"> and streetNum = #{streetNum}</if>
+            <if test="poiName != null  and poiName != ''"> and poiName like concat('%', #{poiName}, '%')</if>
+            <if test="cityCode != null  and cityCode != ''"> and cityCode = #{cityCode}</if>
+            <if test="address != null  and address != ''"> and address = #{address}</if>
+            <if test="isHava != null "> and is_hava = #{isHava}</if>
+        </where>
+    </select>
+
+    <select id="selectCgPositioningById" parameterType="Long" resultMap="CgPositioningResult">
+        <include refid="selectCgPositioningVo"/>
+        where id = #{id}
+    </select>
+
+    <insert id="insertCgPositioning" parameterType="CgPositioning">
+        insert into cg_positioning
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="id != null">id,</if>
+            <if test="uId != null">u_id,</if>
+            <if test="lat != null">lat,</if>
+            <if test="lon != null">lon,</if>
+            <if test="country != null">country,</if>
+            <if test="province != null">province,</if>
+            <if test="city != null">city,</if>
+            <if test="district != null">district,</if>
+            <if test="street != null">street,</if>
+            <if test="streetNum != null">streetNum,</if>
+            <if test="poiName != null">poiName,</if>
+            <if test="cityCode != null">cityCode,</if>
+            <if test="address != null">address,</if>
+            <if test="isHava != null">is_hava,</if>
+            <if test="createTime != null">create_time,</if>
+            <if test="updateTime != null">update_time,</if>
+        </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="id != null">#{id},</if>
+            <if test="uId != null">#{uId},</if>
+            <if test="lat != null">#{lat},</if>
+            <if test="lon != null">#{lon},</if>
+            <if test="country != null">#{country},</if>
+            <if test="province != null">#{province},</if>
+            <if test="city != null">#{city},</if>
+            <if test="district != null">#{district},</if>
+            <if test="street != null">#{street},</if>
+            <if test="streetNum != null">#{streetNum},</if>
+            <if test="poiName != null">#{poiName},</if>
+            <if test="cityCode != null">#{cityCode},</if>
+            <if test="address != null">#{address},</if>
+            <if test="isHava != null">#{isHava},</if>
+            <if test="createTime != null">#{createTime},</if>
+            <if test="updateTime != null">#{updateTime},</if>
+        </trim>
+    </insert>
+
+    <update id="updateCgPositioning" parameterType="CgPositioning">
+        update cg_positioning
+        <trim prefix="SET" suffixOverrides=",">
+            <if test="uId != null">u_id = #{uId},</if>
+            <if test="lat != null">lat = #{lat},</if>
+            <if test="lon != null">lon = #{lon},</if>
+            <if test="country != null">country = #{country},</if>
+            <if test="province != null">province = #{province},</if>
+            <if test="city != null">city = #{city},</if>
+            <if test="district != null">district = #{district},</if>
+            <if test="street != null">street = #{street},</if>
+            <if test="streetNum != null">streetNum = #{streetNum},</if>
+            <if test="poiName != null">poiName = #{poiName},</if>
+            <if test="cityCode != null">cityCode = #{cityCode},</if>
+            <if test="address != null">address = #{address},</if>
+            <if test="isHava != null">is_hava = #{isHava},</if>
+            <if test="createTime != null">create_time = #{createTime},</if>
+            <if test="updateTime != null">update_time = #{updateTime},</if>
+        </trim>
+        where id = #{id}
+    </update>
+
+    <delete id="deleteCgPositioningById" parameterType="Long">
+        delete from cg_positioning where id = #{id}
+    </delete>
+
+    <delete id="deleteCgPositioningByIds" parameterType="String">
+        delete from cg_positioning where id in
+        <foreach item="id" collection="array" open="(" separator="," close=")">
+            #{id}
+        </foreach>
+    </delete>
+</mapper>

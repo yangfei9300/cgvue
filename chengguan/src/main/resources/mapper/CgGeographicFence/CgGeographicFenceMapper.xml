@@ -1,0 +1,81 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.ruoyi.CgGeographicFence.mapper.CgGeographicFenceMapper">
+    
+    <resultMap type="CgGeographicFence" id="CgGeographicFenceResult">
+        <result property="id"    column="id"    />
+        <result property="name"    column="name"    />
+        <result property="remark"    column="remark"    />
+        <result property="type"    column="type"    />
+        <result property="info"    column="info"    />
+        <result property="createTime"    column="create_time"    />
+        <result property="updateTime"    column="update_time"    />
+    </resultMap>
+
+    <sql id="selectCgGeographicFenceVo">
+        select id, name, remark, type, info, create_time, update_time from cg_geographic_fence
+    </sql>
+
+    <select id="selectCgGeographicFenceList" parameterType="CgGeographicFence" resultMap="CgGeographicFenceResult">
+        <include refid="selectCgGeographicFenceVo"/>
+        <where>  
+            <if test="name != null  and name != ''"> and name like concat('%', #{name}, '%')</if>
+            <if test="type != null "> and type = #{type}</if>
+            <if test="info != null  and info != ''"> and info = #{info}</if>
+        </where>
+    </select>
+    
+    <select id="selectCgGeographicFenceById" parameterType="Long" resultMap="CgGeographicFenceResult">
+        <include refid="selectCgGeographicFenceVo"/>
+        where id = #{id}
+    </select>
+
+    <insert id="insertCgGeographicFence" parameterType="CgGeographicFence">
+        insert into cg_geographic_fence
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="id != null">id,</if>
+            <if test="name != null">name,</if>
+            <if test="remark != null">remark,</if>
+            <if test="type != null">type,</if>
+            <if test="info != null">info,</if>
+            <if test="createTime != null">create_time,</if>
+            <if test="updateTime != null">update_time,</if>
+         </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="id != null">#{id},</if>
+            <if test="name != null">#{name},</if>
+            <if test="remark != null">#{remark},</if>
+            <if test="type != null">#{type},</if>
+            <if test="info != null">#{info},</if>
+            <if test="createTime != null">#{createTime},</if>
+            <if test="updateTime != null">#{updateTime},</if>
+         </trim>
+    </insert>
+
+    <update id="updateCgGeographicFence" parameterType="CgGeographicFence">
+        update cg_geographic_fence
+        <trim prefix="SET" suffixOverrides=",">
+            <if test="name != null">name = #{name},</if>
+            <if test="remark != null">remark = #{remark},</if>
+            <if test="type != null">type = #{type},</if>
+            <if test="info != null">info = #{info},</if>
+            <if test="info != null">info = #{info},</if>
+            <if test="createTime != null">create_time = #{createTime},</if>
+            <if test="updateTime != null">update_time = #{updateTime},</if>
+        </trim>
+        where id = #{id}
+    </update>
+
+    <delete id="deleteCgGeographicFenceById" parameterType="Long">
+        delete from cg_geographic_fence where id = #{id}
+    </delete>
+
+    <delete id="deleteCgGeographicFenceByIds" parameterType="String">
+        delete from cg_geographic_fence where id in 
+        <foreach item="id" collection="array" open="(" separator="," close=")">
+            #{id}
+        </foreach>
+    </delete>
+</mapper>

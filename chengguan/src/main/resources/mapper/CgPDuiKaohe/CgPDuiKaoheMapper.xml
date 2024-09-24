@@ -1,0 +1,78 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.ruoyi.CgPDuiKaohe.mapper.CgPDuiKaoheMapper">
+    
+    <resultMap type="CgPDuiKaohe" id="CgPDuiKaoheResult">
+        <result property="id"    column="id"    />
+        <result property="teamName"    column="team_name"    />
+        <result property="fen"    column="fen"    />
+        <result property="fTime"    column="f_time"    />
+        <result property="createTime"    column="create_time"    />
+    </resultMap>
+
+    <sql id="selectCgPDuiKaoheVo">
+        select id, team_name, fen, f_time, create_time from cg_p_dui_kaohe
+    </sql>
+
+    <select id="selectCgPDuiKaoheList" parameterType="CgPDuiKaohe" resultMap="CgPDuiKaoheResult">
+        <include refid="selectCgPDuiKaoheVo"/>
+        <where>  
+            <if test="teamName != null  and teamName != ''"> and team_name like concat('%', #{teamName}, '%')</if>
+            <if test="fTime != null  and fTime != ''"> and f_time = #{fTime}</if>
+        </where>
+        ORDER BY f_time ASC
+    </select>
+
+    <select id="qcsall" parameterType="CgPDuiKaohe" resultMap="CgPDuiKaoheResult">
+        select DISTINCT team_name from cg_p_dui_kaohe
+    </select>
+
+
+
+    <select id="selectCgPDuiKaoheById" parameterType="Long" resultMap="CgPDuiKaoheResult">
+        <include refid="selectCgPDuiKaoheVo"/>
+        where id = #{id}
+    </select>
+
+    <insert id="insertCgPDuiKaohe" parameterType="CgPDuiKaohe">
+        insert into cg_p_dui_kaohe
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="id != null">id,</if>
+            <if test="teamName != null">team_name,</if>
+            <if test="fen != null">fen,</if>
+            <if test="fTime != null">f_time,</if>
+            <if test="createTime != null">create_time,</if>
+         </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="id != null">#{id},</if>
+            <if test="teamName != null">#{teamName},</if>
+            <if test="fen != null">#{fen},</if>
+            <if test="fTime != null">#{fTime},</if>
+            <if test="createTime != null">#{createTime},</if>
+         </trim>
+    </insert>
+
+    <update id="updateCgPDuiKaohe" parameterType="CgPDuiKaohe">
+        update cg_p_dui_kaohe
+        <trim prefix="SET" suffixOverrides=",">
+            <if test="teamName != null">team_name = #{teamName},</if>
+            <if test="fen != null">fen = #{fen},</if>
+            <if test="fTime != null">f_time = #{fTime},</if>
+            <if test="createTime != null">create_time = #{createTime},</if>
+        </trim>
+        where id = #{id}
+    </update>
+
+    <delete id="deleteCgPDuiKaoheById" parameterType="Long">
+        delete from cg_p_dui_kaohe where id = #{id}
+    </delete>
+
+    <delete id="deleteCgPDuiKaoheByIds" parameterType="String">
+        delete from cg_p_dui_kaohe where id in 
+        <foreach item="id" collection="array" open="(" separator="," close=")">
+            #{id}
+        </foreach>
+    </delete>
+</mapper>

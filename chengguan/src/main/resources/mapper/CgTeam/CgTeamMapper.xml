@@ -1,0 +1,99 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.ruoyi.CgTeam.mapper.CgTeamMapper">
+
+    <resultMap type="CgTeam" id="CgTeamResult">
+        <result property="id"    column="id"    />
+        <result property="tName"    column="t_name"    />
+        <result property="type"    column="type"    />
+        <result property="workTimeZS"    column="work_time_z_s"    />
+        <result property="workTimeZX"    column="work_time_z_x"    />
+        <result property="workTimeXS"    column="work_time_x_s"    />
+        <result property="workTimeXX"    column="work_time_x_x"    />
+        <result property="dlwlId"    column="dlwl_id"    />
+        <result property="workTimeId"    column="work_time_id"    />
+        <result property="createTime"    column="create_time"    />
+        <result property="updateTime"    column="update_time"    />
+    </resultMap>
+
+    <sql id="selectCgTeamVo">
+        select id, t_name, type, work_time_z_s, work_time_z_x, work_time_x_s, work_time_x_x, dlwl_id, work_time_id, create_time, update_time from cg_team
+    </sql>
+
+    <select id="selectCgTeamList" parameterType="CgTeam" resultMap="CgTeamResult">
+        <include refid="selectCgTeamVo"/>
+        <where>
+            <if test="tName != null  and tName != ''"> and t_name like concat('%', #{tName}, '%')</if>
+            <if test="type != null "> and type = #{type}</if>
+            <if test="workTimeZS != null "> and work_time_z_s = #{workTimeZS}</if>
+            <if test="workTimeZX != null "> and work_time_z_x = #{workTimeZX}</if>
+            <if test="workTimeXS != null "> and work_time_x_s = #{workTimeXS}</if>
+            <if test="workTimeXX != null "> and work_time_x_x = #{workTimeXX}</if>
+            <if test="dlwlId != null "> and dlwl_id = #{dlwlId}</if>
+            <if test="workTimeId != null "> and work_time_id = #{workTimeId}</if>
+        </where>
+    </select>
+
+    <select id="selectCgTeamById" parameterType="Long" resultMap="CgTeamResult">
+        <include refid="selectCgTeamVo"/>
+        where id = #{id}
+    </select>
+
+    <insert id="insertCgTeam" parameterType="CgTeam" useGeneratedKeys="true" keyProperty="id">
+        insert into cg_team
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="tName != null">t_name,</if>
+            <if test="type != null">type,</if>
+            <if test="workTimeZS != null">work_time_z_s,</if>
+            <if test="workTimeZX != null">work_time_z_x,</if>
+            <if test="workTimeXS != null">work_time_x_s,</if>
+            <if test="workTimeXX != null">work_time_x_x,</if>
+            <if test="dlwlId != null">dlwl_id,</if>
+            <if test="workTimeId != null">work_time_id,</if>
+            <if test="createTime != null">create_time,</if>
+            <if test="updateTime != null">update_time,</if>
+        </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="tName != null">#{tName},</if>
+            <if test="type != null">#{type},</if>
+            <if test="workTimeZS != null">#{workTimeZS},</if>
+            <if test="workTimeZX != null">#{workTimeZX},</if>
+            <if test="workTimeXS != null">#{workTimeXS},</if>
+            <if test="workTimeXX != null">#{workTimeXX},</if>
+            <if test="dlwlId != null">#{dlwlId},</if>
+            <if test="workTimeId != null">#{workTimeId},</if>
+            <if test="createTime != null">#{createTime},</if>
+            <if test="updateTime != null">#{updateTime},</if>
+        </trim>
+    </insert>
+
+    <update id="updateCgTeam" parameterType="CgTeam">
+        update cg_team
+        <trim prefix="SET" suffixOverrides=",">
+            <if test="tName != null">t_name = #{tName},</if>
+            <if test="type != null">type = #{type},</if>
+            <if test="workTimeZS != null">work_time_z_s = #{workTimeZS},</if>
+            <if test="workTimeZX != null">work_time_z_x = #{workTimeZX},</if>
+            <if test="workTimeXS != null">work_time_x_s = #{workTimeXS},</if>
+            <if test="workTimeXX != null">work_time_x_x = #{workTimeXX},</if>
+            <if test="dlwlId != null">dlwl_id = #{dlwlId},</if>
+            <if test="workTimeId != null">work_time_id = #{workTimeId},</if>
+            <if test="createTime != null">create_time = #{createTime},</if>
+            <if test="updateTime != null">update_time = #{updateTime},</if>
+        </trim>
+        where id = #{id}
+    </update>
+
+    <delete id="deleteCgTeamById" parameterType="Long">
+        delete from cg_team where id = #{id}
+    </delete>
+
+    <delete id="deleteCgTeamByIds" parameterType="String">
+        delete from cg_team where id in
+        <foreach item="id" collection="array" open="(" separator="," close=")">
+            #{id}
+        </foreach>
+    </delete>
+</mapper>

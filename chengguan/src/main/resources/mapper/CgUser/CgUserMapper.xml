@@ -1,0 +1,283 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.ruoyi.CgUser.mapper.CgUserMapper">
+    
+    <resultMap type="CgUser" id="CgUserResult">
+        <result property="id"    column="id"    />
+        <result property="name"    column="name"    />
+        <result property="avatar"    column="avatar"    />
+        <result property="phone"    column="phone"    />
+        <result property="password"    column="password"    />
+        <result property="email"    column="email"    />
+        <result property="fen"    column="fen"    />
+        <result property="uType"    column="u_type"    />
+        <result property="teamId"    column="team_id"    />
+        <result property="isDz"    column="is_dz"    />
+
+        <result property="shequId"    column="shequ_id"    />
+        <result property="jiedaoId"    column="jiedao_id"    />
+
+        <result property="lat"    column="lat"    />
+        <result property="lng"    column="lng"    />
+        <result property="areaId"    column="area_id"    />
+        <result property="isJin"    column="is_jin"    />
+        <result property="workTimeZaoS"    column="work_time_zao_s"    />
+        <result property="workTimeZaoX"    column="work_time_zao_x"    />
+        <result property="workTimeXiaS"    column="work_time_xia_s"    />
+        <result property="workTimeXiaX"    column="work_time_xia_x"    />
+
+        <result property="workTimeId"    column="work_time_id"    />
+        <result property="restType"    column="rest_type"    />
+        <result property="renark"    column="renark"    />
+        <result property="createTime"    column="create_time"    />
+        <result property="updateTime"    column="update_time"    />
+
+        <result property="params.ct_name"    column="ctname"    />
+        <result property="params.area_name"    column="area_name"    />
+        <result property="params.work_name"    column="work_name"    />
+
+    </resultMap>
+
+    <sql id="selectCgUserVo">
+        select id, name, avatar, phone,shequ_id,jiedao_id, password, email, fen,work_time_id, u_type,lat,lng, team_id, is_dz, area_id, is_jin, work_time_zao_s, work_time_zao_x, work_time_xia_s, work_time_xia_x, rest_type, renark, create_time, update_time from cg_user
+    </sql>
+
+    <select id="selectCgUserList" parameterType="CgUser" resultMap="CgUserResult">
+        <include refid="selectCgUserVo"/>
+        <where>
+            <if test="name != null  and name != ''"> and name like concat('%', #{name}, '%')</if>
+            <if test="avatar != null  and avatar != ''"> and avatar = #{avatar}</if>
+            <if test="phone != null  and phone != ''"> and phone = #{phone}</if>
+            <if test="password != null  and password != ''"> and password = #{password}</if>
+            <if test="email != null  and email != ''"> and email = #{email}</if>
+            <if test="fen != null "> and fen = #{fen}</if>
+            <if test="uType != null "> and u_type = #{uType}</if>
+            <if test="teamId != null "> and team_id = #{teamId}</if>
+            <if test="id != null "> and id = #{id}</if>
+            <if test="isDz != null "> and is_dz = #{isDz}</if>
+            <if test="shequId != null "> and shequ_id = #{shequId}</if>
+            <if test="jiedaoId != null "> and jiedao_id = #{jiedaoId}</if>
+
+
+            <if test="areaId != null "> and area_id = #{areaId}</if>
+            <if test="isJin != null "> and is_jin = #{isJin}</if>
+            <if test="workTimeZaoS != null "> and work_time_zao_s = #{workTimeZaoS}</if>
+            <if test="workTimeZaoX != null "> and work_time_zao_x = #{workTimeZaoX}</if>
+            <if test="workTimeXiaS != null "> and work_time_xia_s = #{workTimeXiaS}</if>
+            <if test="workTimeXiaX != null "> and work_time_xia_x = #{workTimeXiaX}</if>
+            <if test="workTimeId != null "> and work_time_id = #{workTimeId}</if>
+            <if test="restType != null "> and rest_type = #{restType}</if>
+            <if test="renark != null  and renark != ''"> and renark = #{renark}</if>
+        </where>
+    </select>
+
+
+    <select  id="selectCgUserList1" parameterType="CgUser" resultMap="CgUserResult">
+        SELECT
+            cu.*,
+            ct.t_name AS ctname,
+            cgf.`name` AS area_name ,
+            cs.`name` as work_name
+        FROM
+            cg_user cu
+                LEFT JOIN cg_team ct ON cu.team_id = ct.id
+                LEFT JOIN cg_geographic_fence cgf ON cu.area_id = cgf.id
+                LEFT JOIN cg_scheduling cs ON cs.id = cu.work_time_id
+        <where>
+            <if test="name != null  and name != ''"> and cu.name like concat('%', #{name}, '%')</if>
+            <if test="avatar != null  and avatar != ''"> and cu.avatar = #{avatar}</if>
+            <if test="phone != null  and phone != ''"> and cu.phone = #{phone}</if>
+            <if test="password != null  and password != ''"> and cu.password = #{password}</if>
+            <if test="email != null  and email != ''"> and cu.email = #{email}</if>
+            <if test="fen != null "> and cu.fen = #{fen}</if>
+            <if test="uType != null "> and cu.u_type = #{uType}</if>
+            <if test="teamId != null "> and cu.team_id = #{teamId}</if>
+            <if test="id != null "> and cu.id = #{id}</if>
+            <if test="isDz != null "> and cu.is_dz = #{isDz}</if>
+            <if test="areaId != null "> and cu.area_id = #{areaId}</if>
+            <if test="isJin != null "> and cu.is_jin = #{isJin}</if>
+            <if test="workTimeZaoS != null "> and cu.work_time_zao_s = #{workTimeZaoS}</if>
+            <if test="workTimeZaoX != null "> and cu.work_time_zao_x = #{workTimeZaoX}</if>
+            <if test="workTimeXiaS != null "> and cu.work_time_xia_s = #{workTimeXiaS}</if>
+            <if test="workTimeXiaX != null "> and cu.work_time_xia_x = #{workTimeXiaX}</if>
+            <if test="workTimeId != null "> and cu.work_time_id = #{workTimeId}</if>
+            <if test="restType != null "> and cu.rest_type = #{restType}</if>
+            <if test="renark != null  and renark != ''"> and cu.renark = #{renark}</if>
+            <if test="params.name != null  and params.name != ''"> and name = #{params.name}</if>
+        </where>
+    </select>
+
+
+    <select id="selectCgUserById" parameterType="Long" resultMap="CgUserResult">
+        <include refid="selectCgUserVo"/>
+        where id = #{id}
+    </select>
+
+
+
+
+
+    <resultMap id="userKaoqin" type="CgUser" >
+        <id property="id" column="user_id" />
+        <result property="name" column="name" />
+        <result property="name" column="name" />
+        <!-- 一对多关系映射 -->
+        <collection property="cgAttendanceList" ofType="CgAttendance">
+            <id property="id" column="id" />
+            <result property="attendDate" column="attend_date" />
+            <result property="checkIn" column="check_in" />
+            <result property="checkOut" column="check_out" />
+            <result property="weekNum" column="week_num" />
+            <result property="remark" column="remark" />
+            <result property="params.check_in_status" column="check_in_status" />
+            <result property="params.check_out_status" column="check_out_status" />
+        </collection>
+    </resultMap>
+
+    <select id="getKqoqinExcel1"  resultMap="userKaoqin"  parameterType="CgUser" >
+        SELECT
+            ca.id,
+            ca.attend_date,
+            ca.check_in,
+            ca.check_out,
+            ca.week_num,
+            ca.remark,
+            cu.`name`,
+            cu.id AS user_id,
+            cdh1.STATUS check_in_status,
+            cdh2.STATUS check_out_status
+        FROM
+            cg_attendance ca
+                LEFT JOIN cg_user cu ON ca.u_id = cu.id
+                LEFT JOIN cg_daka_history cdh1 ON cdh1.id = ca.check_in_id
+                LEFT JOIN cg_daka_history cdh2 ON cdh2.id = ca.check_out_id
+        <where>
+        <if test="params.checkIn != null "> AND ca.attend_date   >=#{params.checkIn}</if>
+        <if test="params.checkOut != null "> AND ca.attend_date   &lt;=#{params.checkOut}</if>
+        <if test="params.teamId != null and  params.teamId != '' "> AND cu.team_id   =#{params.teamId}</if>
+        <if test="params.uName != null   and params.uName != ''"> AND cu.name  LIKE CONCAT('%', #{params.uName}, '%') </if>
+        </where>
+        ORDER BY
+        cu.`name` ASC,
+        ca.attend_date ASC
+    </select>
+
+<!--用户相关信息-->
+     <insert id="insertCgUser" parameterType="CgUser" useGeneratedKeys="true" keyProperty="id">
+        insert into cg_user
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="name != null">name,</if>
+            <if test="avatar != null">avatar,</if>
+            <if test="phone != null">phone,</if>
+            <if test="password != null">password,</if>
+            <if test="email != null">email,</if>
+            <if test="fen != null">fen,</if>
+            <if test="uType != null">u_type,</if>
+            <if test="teamId != null">team_id,</if>
+            <if test="isDz != null">is_dz,</if>
+
+            <if test="shequId != null">shequ_id,</if>
+            <if test="jiedaoId != null">jiedao_id,</if>
+
+            <if test="areaId != null">area_id,</if>
+            <if test="isJin != null">is_jin,</if>
+
+            <if test="lat != null">lat,</if>
+            <if test="lng != null">lng,</if>
+
+
+            <if test="workTimeZaoS != null">work_time_zao_s,</if>
+            <if test="workTimeZaoX != null">work_time_zao_x,</if>
+            <if test="workTimeXiaS != null">work_time_xia_s,</if>
+            <if test="workTimeXiaX != null">work_time_xia_x,</if>
+
+            <if test="workTimeId != null">work_time_id,</if>
+            <if test="restType != null">rest_type,</if>
+            <if test="renark != null">renark,</if>
+            <if test="createTime != null">create_time,</if>
+            <if test="updateTime != null">update_time,</if>
+         </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="name != null">#{name},</if>
+            <if test="avatar != null">#{avatar},</if>
+            <if test="phone != null">#{phone},</if>
+            <if test="password != null">#{password},</if>
+            <if test="email != null">#{email},</if>
+            <if test="fen != null">#{fen},</if>
+            <if test="uType != null">#{uType},</if>
+            <if test="teamId != null">#{teamId},</if>
+            <if test="isDz != null">#{isDz},</if>
+
+            <if test="shequId != null">#{shequId},</if>
+            <if test="jiedaoId != null">#{jiedaoId},</if>
+
+            <if test="areaId != null">#{areaId},</if>
+            <if test="isJin != null">#{isJin},</if>
+
+
+            <if test="lat != null">#{lat},</if>
+            <if test="lng != null">#{lng},</if>
+
+            <if test="workTimeZaoS != null">#{workTimeZaoS},</if>
+            <if test="workTimeZaoX != null">#{workTimeZaoX},</if>
+            <if test="workTimeXiaS != null">#{workTimeXiaS},</if>
+            <if test="workTimeXiaX != null">#{workTimeXiaX},</if>
+
+
+            <if test="workTimeId != null">#{workTimeId},</if>
+
+            <if test="restType != null">#{restType},</if>
+            <if test="renark != null">#{renark},</if>
+            <if test="createTime != null">#{createTime},</if>
+            <if test="updateTime != null">#{updateTime},</if>
+         </trim>
+    </insert>
+
+    <update id="updateCgUser" parameterType="CgUser">
+        update cg_user
+        <trim prefix="SET" suffixOverrides=",">
+            <if test="name != null">name = #{name},</if>
+            <if test="avatar != null">avatar = #{avatar},</if>
+            <if test="phone != null">phone = #{phone},</if>
+            <if test="password != null">password = #{password},</if>
+            <if test="email != null">email = #{email},</if>
+            <if test="fen != null">fen = #{fen},</if>
+            <if test="uType != null">u_type = #{uType},</if>
+            <if test="teamId != null">team_id = #{teamId},</if>
+            <if test="isDz != null">is_dz = #{isDz},</if>
+
+            <if test="shequId != null">shequ_id = #{shequId},</if>
+            <if test="jiedaoId != null">jiedao_id = #{jiedaoId},</if>
+
+            <if test="areaId != null">area_id = #{areaId},</if>
+            <if test="isJin != null">is_jin = #{isJin},</if>
+
+            <if test="lat != null">lat = #{lat},</if>
+            <if test="lng != null">lng = #{lng},</if>
+
+            <if test="workTimeZaoS != null">work_time_zao_s = #{workTimeZaoS},</if>
+            <if test="workTimeZaoX != null">work_time_zao_x = #{workTimeZaoX},</if>
+            <if test="workTimeXiaS != null">work_time_xia_s = #{workTimeXiaS},</if>
+            <if test="workTimeXiaX != null">work_time_xia_x = #{workTimeXiaX},</if>
+            <if test="workTimeId != null">work_time_id = #{workTimeId},</if>
+            <if test="restType != null">rest_type = #{restType},</if>
+            <if test="renark != null">renark = #{renark},</if>
+            <if test="createTime != null">create_time = #{createTime},</if>
+            <if test="updateTime != null">update_time = #{updateTime},</if>
+        </trim>
+        where id = #{id}
+    </update>
+
+    <delete id="deleteCgUserById" parameterType="Long">
+        delete from cg_user where id = #{id}
+    </delete>
+
+    <delete id="deleteCgUserByIds" parameterType="String">
+        delete from cg_user where id in 
+        <foreach item="id" collection="array" open="(" separator="," close=")">
+            #{id}
+        </foreach>
+    </delete>
+</mapper>

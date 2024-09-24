@@ -1,0 +1,134 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.ruoyi.CgMonthKaohe.mapper.CgMonthKaoheMapper">
+
+    <resultMap type="CgMonthKaohe" id="CgMonthKaoheResult">
+        <result property="id"    column="id"    />
+        <result property="uId"    column="u_id"    />
+        <result property="fen1"    column="fen1"    />
+        <result property="fen2"    column="fen2"    />
+        <result property="fen3"    column="fen3"    />
+        <result property="fen4"    column="fen4"    />
+        <result property="remark"    column="remark"    />
+        <result property="month"    column="month"    />
+        <result property="createTime"    column="create_time"    />
+        <result property="updateTime"    column="update_time"    />
+        <result property="name"    column="name"    />
+
+    </resultMap>
+
+    <sql id="selectCgMonthKaoheVo">
+        select id, u_id, fen1, fen2, fen3, fen4, remark, month, create_time, update_time from cg_month_kaohe
+    </sql>
+
+    <select id="selectCgMonthKaoheList" parameterType="CgMonthKaohe" resultMap="CgMonthKaoheResult">
+        <include refid="selectCgMonthKaoheVo"/>
+        <where>
+            <if test="uId != null "> and u_id = #{uId}</if>
+            <if test="month != null  and month != ''"> and month = #{month}</if>
+        </where>
+    </select>
+
+
+<!--    计算队伍考核-->
+    <select id="getTeamLaohe" parameterType="CgMonthKaohe" resultMap="CgMonthKaoheResult">
+        SELECT
+            cu.team_id as u_id,
+            ROUND(AVG(cmk.fen1), 2) AS fen1,
+            ROUND(AVG(cmk.fen2), 2) AS fen2,
+            cmk.`month`
+        FROM
+            cg_month_kaohe cmk
+                LEFT JOIN
+            cg_user cu ON cmk.u_id = cu.id
+        WHERE
+            cmk.month = #{month}
+        GROUP BY
+            cu.team_id;
+
+    </select>
+
+
+    <select id="selectCgMonthKaoheList1" parameterType="CgMonthKaohe" resultMap="CgMonthKaoheResult">
+        SELECT
+        k.id,
+        k.u_id,
+        k.fen1,
+        k.fen2,
+        k.fen3,
+        k.fen4,
+        k.remark,
+        k.MONTH,
+        k.create_time,
+        k.update_time,
+        u.NAME as name
+        FROM
+        cg_month_kaohe k
+        JOIN cg_user u ON k.u_id = u.id
+        <where>
+            <if test="uId != null "> and k.u_id = #{uId}</if>
+            <if test="month != null  and month != ''"> and k.month = #{month}</if>
+            <if test="params.name != null "> and   u.name LIKE CONCAT('%', #{params.name}, '%');</if>
+        </where>
+    </select>
+
+    <select id="selectCgMonthKaoheById" parameterType="Long" resultMap="CgMonthKaoheResult">
+        <include refid="selectCgMonthKaoheVo"/>
+        where id = #{id}
+    </select>
+
+    <insert id="insertCgMonthKaohe" parameterType="CgMonthKaohe">
+        insert into cg_month_kaohe
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="uId != null">u_id,</if>
+            <if test="fen1 != null">fen1,</if>
+            <if test="fen2 != null">fen2,</if>
+            <if test="fen3 != null">fen3,</if>
+            <if test="fen4 != null">fen4,</if>
+            <if test="remark != null">remark,</if>
+            <if test="month != null">month,</if>
+            <if test="createTime != null">create_time,</if>
+            <if test="updateTime != null">update_time,</if>
+        </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="uId != null">#{uId},</if>
+            <if test="fen1 != null">#{fen1},</if>
+            <if test="fen2 != null">#{fen2},</if>
+            <if test="fen3 != null">#{fen3},</if>
+            <if test="fen4 != null">#{fen4},</if>
+            <if test="remark != null">#{remark},</if>
+            <if test="month != null">#{month},</if>
+            <if test="createTime != null">#{createTime},</if>
+            <if test="updateTime != null">#{updateTime},</if>
+        </trim>
+    </insert>
+
+    <update id="updateCgMonthKaohe" parameterType="CgMonthKaohe">
+        update cg_month_kaohe
+        <trim prefix="SET" suffixOverrides=",">
+            <if test="uId != null">u_id = #{uId},</if>
+            <if test="fen1 != null">fen1 = #{fen1},</if>
+            <if test="fen2 != null">fen2 = #{fen2},</if>
+            <if test="fen3 != null">fen3 = #{fen3},</if>
+            <if test="fen4 != null">fen4 = #{fen4},</if>
+            <if test="remark != null">remark = #{remark},</if>
+            <if test="month != null">month = #{month},</if>
+            <if test="createTime != null">create_time = #{createTime},</if>
+            <if test="updateTime != null">update_time = #{updateTime},</if>
+        </trim>
+        where id = #{id}
+    </update>
+
+    <delete id="deleteCgMonthKaoheById" parameterType="Long">
+        delete from cg_month_kaohe where id = #{id}
+    </delete>
+
+    <delete id="deleteCgMonthKaoheByIds" parameterType="String">
+        delete from cg_month_kaohe where id in
+        <foreach item="id" collection="array" open="(" separator="," close=")">
+            #{id}
+        </foreach>
+    </delete>
+</mapper>

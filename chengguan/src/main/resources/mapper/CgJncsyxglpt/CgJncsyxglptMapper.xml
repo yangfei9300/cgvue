@@ -1,0 +1,131 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.ruoyi.CgJncsyxglpt.mapper.CgJncsyxglptMapper">
+
+    <resultMap type="CgJncsyxglpt" id="CgJncsyxglptResult">
+        <result property="id"    column="id"    />
+        <result property="shixian"    column="shixian"    />
+        <result property="shengyushijian"    column="shengyushijian"    />
+        <result property="anjianhao"    column="anjianhao"    />
+        <result property="quyu"    column="quyu"    />
+        <result property="zhuangtai"    column="zhuangtai"    />
+        <result property="dangqianhuanjie"    column="dangqianhuanjie"    />
+        <result property="anjianlaiyuan"    column="anjianlaiyuan"    />
+        <result property="laijianshijian"    column="laijianshijian"    />
+        <result property="leibie"    column="leibie"    />
+        <result property="shifaweizhi"    column="shifaweizhi"    />
+        <result property="wentimiaoshu"    column="wentimiaoshu"    />
+        <result property="shifashijian"    column="shifashijian"    />
+        <result property="daoqishijian"    column="daoqishijian"    />
+        <result property="tName"    column="t_name"    />
+        <result property="createTime"    column="create_time"    />
+        <result property="updateTime"    column="update_time"    />
+    </resultMap>
+
+    <sql id="selectCgJncsyxglptVo">
+        select id, shixian, shengyushijian, anjianhao, quyu, zhuangtai, dangqianhuanjie, anjianlaiyuan, laijianshijian, leibie, shifaweizhi, wentimiaoshu, shifashijian, daoqishijian, t_name, create_time, update_time from cg_jncsyxglpt
+    </sql>
+
+    <select id="selectCgJncsyxglptList" parameterType="CgJncsyxglpt" resultMap="CgJncsyxglptResult">
+        <include refid="selectCgJncsyxglptVo"/>
+        <where>
+            <if test="shixian != null  and shixian != ''"> and shixian = #{shixian}</if>
+            <if test="shengyushijian != null  and shengyushijian != ''"> and shengyushijian = #{shengyushijian}</if>
+            <if test="anjianhao != null  and anjianhao != ''"> and anjianhao = #{anjianhao}</if>
+            <if test="quyu != null  and quyu != ''"> and quyu = #{quyu}</if>
+            <if test="zhuangtai != null  and zhuangtai != ''"> and zhuangtai = #{zhuangtai}</if>
+            <if test="dangqianhuanjie != null  and dangqianhuanjie != ''"> and dangqianhuanjie = #{dangqianhuanjie}</if>
+            <if test="anjianlaiyuan != null  and anjianlaiyuan != ''"> and anjianlaiyuan = #{anjianlaiyuan}</if>
+            <if test="laijianshijian != null "> and laijianshijian = #{laijianshijian}</if>
+            <if test="leibie != null  and leibie != ''"> and leibie = #{leibie}</if>
+            <if test="shifaweizhi != null  and shifaweizhi != ''"> and shifaweizhi = #{shifaweizhi}</if>
+            <if test="wentimiaoshu != null  and wentimiaoshu != ''"> and wentimiaoshu = #{wentimiaoshu}</if>
+            <if test="shifashijian != null  and shifashijian != ''"> and shifashijian = #{shifashijian}</if>
+            <if test="daoqishijian != null  and daoqishijian != ''"> and daoqishijian = #{daoqishijian}</if>
+            <if test="tName != null  and tName != ''"> and t_name like concat('%', #{tName}, '%')</if>
+        </where>
+    </select>
+
+    <select id="selectCgJncsyxglptById" parameterType="Long" resultMap="CgJncsyxglptResult">
+        <include refid="selectCgJncsyxglptVo"/>
+        where id = #{id}
+    </select>
+
+    <insert id="insertCgJncsyxglpt" parameterType="CgJncsyxglpt">
+        insert into cg_jncsyxglpt
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="id != null">id,</if>
+            <if test="shixian != null">shixian,</if>
+            <if test="shengyushijian != null">shengyushijian,</if>
+            <if test="anjianhao != null">anjianhao,</if>
+            <if test="quyu != null">quyu,</if>
+            <if test="zhuangtai != null">zhuangtai,</if>
+            <if test="dangqianhuanjie != null">dangqianhuanjie,</if>
+            <if test="anjianlaiyuan != null">anjianlaiyuan,</if>
+            <if test="laijianshijian != null">laijianshijian,</if>
+            <if test="leibie != null">leibie,</if>
+            <if test="shifaweizhi != null">shifaweizhi,</if>
+            <if test="wentimiaoshu != null">wentimiaoshu,</if>
+            <if test="shifashijian != null">shifashijian,</if>
+            <if test="daoqishijian != null">daoqishijian,</if>
+            <if test="tName != null">t_name,</if>
+            <if test="createTime != null">create_time,</if>
+            <if test="updateTime != null">update_time,</if>
+        </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="id != null">#{id},</if>
+            <if test="shixian != null">#{shixian},</if>
+            <if test="shengyushijian != null">#{shengyushijian},</if>
+            <if test="anjianhao != null">#{anjianhao},</if>
+            <if test="quyu != null">#{quyu},</if>
+            <if test="zhuangtai != null">#{zhuangtai},</if>
+            <if test="dangqianhuanjie != null">#{dangqianhuanjie},</if>
+            <if test="anjianlaiyuan != null">#{anjianlaiyuan},</if>
+            <if test="laijianshijian != null">#{laijianshijian},</if>
+            <if test="leibie != null">#{leibie},</if>
+            <if test="shifaweizhi != null">#{shifaweizhi},</if>
+            <if test="wentimiaoshu != null">#{wentimiaoshu},</if>
+            <if test="shifashijian != null">#{shifashijian},</if>
+            <if test="daoqishijian != null">#{daoqishijian},</if>
+            <if test="tName != null">#{tName},</if>
+            <if test="createTime != null">#{createTime},</if>
+            <if test="updateTime != null">#{updateTime},</if>
+        </trim>
+    </insert>
+
+    <update id="updateCgJncsyxglpt" parameterType="CgJncsyxglpt">
+        update cg_jncsyxglpt
+        <trim prefix="SET" suffixOverrides=",">
+            <if test="shixian != null">shixian = #{shixian},</if>
+            <if test="shengyushijian != null">shengyushijian = #{shengyushijian},</if>
+            <if test="anjianhao != null">anjianhao = #{anjianhao},</if>
+            <if test="quyu != null">quyu = #{quyu},</if>
+            <if test="zhuangtai != null">zhuangtai = #{zhuangtai},</if>
+            <if test="dangqianhuanjie != null">dangqianhuanjie = #{dangqianhuanjie},</if>
+            <if test="anjianlaiyuan != null">anjianlaiyuan = #{anjianlaiyuan},</if>
+            <if test="laijianshijian != null">laijianshijian = #{laijianshijian},</if>
+            <if test="leibie != null">leibie = #{leibie},</if>
+            <if test="shifaweizhi != null">shifaweizhi = #{shifaweizhi},</if>
+            <if test="wentimiaoshu != null">wentimiaoshu = #{wentimiaoshu},</if>
+            <if test="shifashijian != null">shifashijian = #{shifashijian},</if>
+            <if test="daoqishijian != null">daoqishijian = #{daoqishijian},</if>
+            <if test="tName != null">t_name = #{tName},</if>
+            <if test="createTime != null">create_time = #{createTime},</if>
+            <if test="updateTime != null">update_time = #{updateTime},</if>
+        </trim>
+        where id = #{id}
+    </update>
+
+    <delete id="deleteCgJncsyxglptById" parameterType="Long">
+        delete from cg_jncsyxglpt where id = #{id}
+    </delete>
+
+    <delete id="deleteCgJncsyxglptByIds" parameterType="String">
+        delete from cg_jncsyxglpt where id in
+        <foreach item="id" collection="array" open="(" separator="," close=")">
+            #{id}
+        </foreach>
+    </delete>
+</mapper>

@@ -1,0 +1,98 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.ruoyi.CgVastSecond.mapper.CgVastSecondMapper">
+    
+    <resultMap type="CgVastSecond" id="CgVastSecondResult">
+        <result property="id"    column="id"    />
+        <result property="uId"    column="u_id"    />
+        <result property="day"    column="day"    />
+        <result property="startTime"    column="start_time"    />
+        <result property="endTime"    column="end_time"    />
+        <result property="vastSecond"    column="vast_second"    />
+        <result property="createTime"    column="create_time"    />
+        <result property="params.user_name"    column="user_name"    />
+
+
+    </resultMap>
+
+    <sql id="selectCgVastSecondVo">
+        select id, u_id, day, start_time, end_time, vast_second, create_time from cg_vast_second
+    </sql>
+
+    <select id="selectCgVastSecondList" parameterType="CgVastSecond" resultMap="CgVastSecondResult">
+        SELECT
+        cvs.*,cu.`name` as user_name
+        FROM
+        cg_vast_second cvs
+        LEFT JOIN cg_user cu ON cvs.u_id=cu.id
+        <where>  
+            <if test="uId != null "> and cvs.u_id = #{uId}</if>
+            <if test="day != null "> and cvs.day = #{day}</if>
+            <if test="startTime != null "> and cvs.start_time = #{startTime}</if>
+            <if test="endTime != null "> and cvs.end_time = #{endTime}</if>
+            <if test="params.user_name != null "> and cu.`name`  LIKE CONCAT('%', #{params.user_name}, '%')</if>
+
+
+        </where>
+    </select>
+
+    <select id="getDayUserids" parameterType="CgVastSecond" resultMap="CgVastSecondResult">
+        SELECT DISTINCT u_id
+        FROM cg_shifouchaochu
+        WHERE create_time BETWEEN #{params.cstart_time} AND #{params.end_time}
+    </select>
+
+
+    
+    <select id="selectCgVastSecondById" parameterType="Long" resultMap="CgVastSecondResult">
+        <include refid="selectCgVastSecondVo"/>
+        where id = #{id}
+    </select>
+
+    <insert id="insertCgVastSecond" parameterType="CgVastSecond">
+        insert into cg_vast_second
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="id != null">id,</if>
+            <if test="uId != null">u_id,</if>
+            <if test="day != null">day,</if>
+            <if test="startTime != null">start_time,</if>
+            <if test="endTime != null">end_time,</if>
+            <if test="vastSecond != null">vast_second,</if>
+            <if test="createTime != null">create_time,</if>
+         </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="id != null">#{id},</if>
+            <if test="uId != null">#{uId},</if>
+            <if test="day != null">#{day},</if>
+            <if test="startTime != null">#{startTime},</if>
+            <if test="endTime != null">#{endTime},</if>
+            <if test="vastSecond != null">#{vastSecond},</if>
+            <if test="createTime != null">#{createTime},</if>
+         </trim>
+    </insert>
+
+    <update id="updateCgVastSecond" parameterType="CgVastSecond">
+        update cg_vast_second
+        <trim prefix="SET" suffixOverrides=",">
+            <if test="uId != null">u_id = #{uId},</if>
+            <if test="day != null">day = #{day},</if>
+            <if test="startTime != null">start_time = #{startTime},</if>
+            <if test="endTime != null">end_time = #{endTime},</if>
+            <if test="createTime != null">create_time = #{createTime},</if>
+        </trim>
+        where id = #{id}
+    </update>
+
+    <delete id="deleteCgVastSecondById" parameterType="Long">
+        delete from cg_vast_second where id = #{id}
+    </delete>
+
+    <delete id="deleteCgVastSecondByIds" parameterType="String">
+        delete from cg_vast_second where id in 
+        <foreach item="id" collection="array" open="(" separator="," close=")">
+            #{id}
+        </foreach>
+    </delete>
+</mapper>

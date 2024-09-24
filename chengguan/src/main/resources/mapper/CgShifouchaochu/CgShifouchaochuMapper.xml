@@ -1,0 +1,144 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.ruoyi.CgShifouchaochu.mapper.CgShifouchaochuMapper">
+
+    <resultMap type="CgShifouchaochu" id="CgShifouchaochuResult">
+        <result property="id" column="id"/>
+        <result property="uId" column="u_id"/>
+        <result property="lat" column="lat"/>
+        <result property="lon" column="lon"/>
+        <result property="type" column="type"/>
+        <result property="createTime" column="create_time"/>
+        <result property="updateTime" column="update_time"/>
+        <result property="params.day" column="day"/>
+        <result property="params.startTime" column="start_time"/>
+        <result property="params.endTime" column="end_time"/>
+        <result property="params.miaoTotal" column="miao_total"/>
+        <result property="params.leave_time" column="leave_time"/>
+        <result property="params.return_time" column="return_time"/>
+
+
+    </resultMap>
+
+    <sql id="selectCgShifouchaochuVo">
+        select id, u_id, lat, lon, type, create_time, update_time
+        from cg_shifouchaochu
+    </sql>
+
+    <select id="selectCgShifouchaochuList" parameterType="CgShifouchaochu" resultMap="CgShifouchaochuResult">
+        <include refid="selectCgShifouchaochuVo"/>
+        <where>
+            <if test="uId != null ">and u_id = #{uId}</if>
+            <if test="lat != null ">and lat = #{lat}</if>
+            <if test="lon != null ">and lon = #{lon}</if>
+            <if test="type != null  and type != ''">and type = #{type}</if>
+            <if test="type != null  and type != ''">and type = #{type}</if>
+        </where>
+    </select>
+
+    <select id="getNowhistory" parameterType="CgShifouchaochu" resultMap="CgShifouchaochuResult">
+        SELECT *
+        FROM cg_shifouchaochu
+        WHERE
+            DATE ( create_time ) = CURDATE( )
+          AND u_id=#{uId}
+        ORDER BY
+            create_time DESC
+    </select>
+
+    <!--查询每天谁提交定位了-->
+    <select id="getDayids" parameterType="CgShifouchaochu" resultMap="CgShifouchaochuResult">
+        SELECT DISTINCT u_id
+        FROM cg_shifouchaochu
+        WHERE DATE (create_time) = CURDATE();
+    </select>
+
+    <!--获取每天外出时间-->
+    <select id="getDayWaichu" parameterType="CgShifouchaochu" resultMap="CgShifouchaochuResult">
+ <![CDATA[
+        SELECT
+            t1.u_id,
+            t1.create_time AS leave_time,
+            COALESCE(t2.create_time, #{params.endTime}) AS return_time,
+            TIMESTAMPDIFF(
+                SECOND,
+                    t1.create_time,
+                    COALESCE(t2.create_time, #{params.endTime})
+                ) AS miao_total
+        FROM
+            cg_shifouchaochu t1
+                LEFT JOIN
+            cg_shifouchaochu t2 ON t1.u_id = t2.u_id
+                AND t2.create_time = (
+                    SELECT MIN(t3.create_time)
+                    FROM cg_shifouchaochu t3
+                    WHERE t3.u_id = t1.u_id
+                      AND t3.create_time > t1.create_time
+                      AND t3.type = '1'
+                )
+        WHERE
+            t1.type = '2'
+          AND t1.create_time BETWEEN #{params.startTime} AND #{params.endTime}
+          AND t1.u_id = 1
+        ORDER BY
+            t1.create_time;
+
+        ]]>
+    </select>
+
+
+    <select id="selectCgShifouchaochuById" parameterType="Long" resultMap="CgShifouchaochuResult">
+        <include refid="selectCgShifouchaochuVo"/>
+        where id = #{id}
+    </select>
+
+    <insert id="insertCgShifouchaochu" parameterType="CgShifouchaochu">
+        insert into cg_shifouchaochu
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="id != null">id,</if>
+            <if test="uId != null">u_id,</if>
+            <if test="lat != null">lat,</if>
+            <if test="lon != null">lon,</if>
+            <if test="type != null">type,</if>
+            <if test="createTime != null">create_time,</if>
+            <if test="updateTime != null">update_time,</if>
+        </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="id != null">#{id},</if>
+            <if test="uId != null">#{uId},</if>
+            <if test="lat != null">#{lat},</if>
+            <if test="lon != null">#{lon},</if>
+            <if test="type != null">#{type},</if>
+            <if test="createTime != null">#{createTime},</if>
+            <if test="updateTime != null">#{updateTime},</if>
+        </trim>
+    </insert>
+
+    <update id="updateCgShifouchaochu" parameterType="CgShifouchaochu">
+        update cg_shifouchaochu
+        <trim prefix="SET" suffixOverrides=",">
+            <if test="uId != null">u_id = #{uId},</if>
+            <if test="lat != null">lat = #{lat},</if>
+            <if test="lon != null">lon = #{lon},</if>
+            <if test="type != null">type = #{type},</if>
+            <if test="createTime != null">create_time = #{createTime},</if>
+            <if test="updateTime != null">update_time = #{updateTime},</if>
+        </trim>
+        where id = #{id}
+    </update>
+
+    <delete id="deleteCgShifouchaochuById" parameterType="Long">
+        delete
+        from cg_shifouchaochu
+        where id = #{id}
+    </delete>
+
+    <delete id="deleteCgShifouchaochuByIds" parameterType="String">
+        delete from cg_shifouchaochu where id in
+        <foreach item="id" collection="array" open="(" separator="," close=")">
+            #{id}
+        </foreach>
+    </delete>
+</mapper>

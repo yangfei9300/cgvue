@@ -1,0 +1,201 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.ruoyi.CgAttendance.mapper.CgAttendanceMapper">
+
+    <resultMap type="CgAttendance" id="CgAttendanceResult">
+        <result property="id"    column="id"    />
+        <result property="uId"    column="u_id"    />
+        <result property="attendDate"    column="attend_date"    />
+        <result property="checkIn"    column="check_in"    />
+        <result property="checkOut"    column="check_out"    />
+        <result property="checkInId"    column="check_in_id"    />
+        <result property="checkOutId"    column="check_out_id"    />
+
+
+        <result property="kSecont"    column="k_secont"    />
+
+        <result property="status"    column="status"    />
+        <result property="overtimeHours"    column="overtime_hours"    />
+        <result property="weekNum"    column="week_num"    />
+        <result property="remark"    column="remark"    />
+        <result property="createTime"    column="create_time"    />
+        <result property="updateTime"    column="update_time"    />
+        <result property="params.in_status"    column="in_status"    />
+        <result property="params.out_status"    column="out_status"    />
+
+        <result property="params.user_id"    column="user_id"    />
+        <result property="params.check_in_status"    column="check_in_status"    />
+        <result property="params.check_out_status"    column="check_out_status"    />
+        <result property="params.name"    column="name"    />
+
+    </resultMap>
+
+    <sql id="selectCgAttendanceVo">
+        select id, u_id, attend_date, check_in, check_out, check_in_id, check_out_id,k_secont, status, overtime_hours, week_num, remark, create_time, update_time from cg_attendance
+    </sql>
+
+    <select id="selectCgAttendanceList" parameterType="CgAttendance" resultMap="CgAttendanceResult">
+        <include refid="selectCgAttendanceVo"/>
+        <where>
+            <if test="uId != null "> and u_id = #{uId}</if>
+            <if test="attendDate != null "> and DATE(attend_date) = #{attendDate}</if>
+            <if test="params.tumes != null "> and DATE(attend_date) = #{params.tumes}</if>
+            <if test="checkIn != null  and checkIn != ''"> and check_in = #{checkIn}</if>
+            <if test="checkOut != null  and checkOut != ''"> and check_out = #{checkOut}</if>
+            <if test="checkInId != null "> and check_in_id = #{checkInId}</if>
+            <if test="checkOutId != null "> and check_out_id = #{checkOutId}</if>
+
+            <if test="status != null  and status != ''"> and status = #{status}</if>
+            <if test="weekNum != null  and weekNum != ''"> and week_num = #{weekNum}</if>
+            <if test="params.selDate != null"> and DATE(create_time) = #{params.selDate}</if>
+
+            <if test="params.year != null ">  AND YEAR ( attend_date ) = #{params.year}</if>
+            <if test="params.month != null ">  AND MONTH ( attend_date ) = #{params.month}</if>
+            <if test="params.day != null ">  AND DAY ( attend_date ) = #{params.day}</if>
+            <if test="params.paiuids != null ">  AND u_id NOT IN ( #{params.paiuids} );</if>
+
+        </where>
+    </select>
+
+    <select id="getKqList" parameterType="CgAttendance" resultMap="CgAttendanceResult">
+        <include refid="selectCgAttendanceVo"/>
+        <where>
+            <if test="params.year != null ">  AND YEAR ( attend_date ) = #{params.year}</if>
+            <if test="params.month != null ">  AND MONTH ( attend_date ) = #{params.month}</if>
+            <if test="params.day != null ">  AND DAY ( attend_date ) = #{params.day}</if>
+            <if test="uId != null "> AND u_id=#{uId}</if>
+        </where>
+
+    </select>
+
+    <select id="getKqHistoryByUid" parameterType="CgAttendance" resultMap="CgAttendanceResult">
+        SELECT
+        ca.*
+        ,cdh.STATUS AS in_status
+        ,cdh1.STATUS AS out_status
+        FROM
+        cg_attendance ca
+        LEFT JOIN cg_daka_history cdh ON ca.check_in_id = cdh.id
+        LEFT JOIN cg_daka_history cdh1 ON ca.check_out_id = cdh1.id
+        <where>
+            <if test="uId != null "> AND ca.u_id=#{uId}</if>
+            <if test="attendDate != null "> AND ca.attend_date   &lt;=#{attendDate}</if>
+            <if test="params.year != null "> AND YEAR(ca.attend_date) = #{params.year}</if>
+            <if test="params.MONTH != null "> AND MONTH(ca.attend_date) = #{params.month}</if>
+        </where>
+        ORDER BY ca.attend_date ASC
+    </select>
+
+    <select id="getHoutaiKaoqinList" parameterType="CgAttendance" resultMap="CgAttendanceResult">
+        SELECT
+        cu.`name`,
+        ca.id,ca.u_id,
+        ca.attend_date,
+        ca.check_in,
+        ca.check_out,
+        ca.week_num,
+        ca.remark,
+        cu.id as user_id,
+        IFNULL (cdh1.STATUS ,'0' ) check_in_status,
+        IFNULL (cdh2.STATUS,'0' ) check_out_status
+        FROM
+        cg_attendance ca
+        LEFT JOIN cg_user cu ON ca.u_id = cu.id
+        LEFT JOIN cg_daka_history cdh1 ON cdh1.id=ca.check_in_id
+        LEFT JOIN cg_daka_history cdh2 ON cdh2.id=ca.check_out_id
+        <where>
+            <if test="params.checkIn != null "> AND ca.attend_date   >=#{params.checkIn}</if>
+            <if test="params.checkOut != null "> AND ca.attend_date   &lt;=#{params.checkOut}</if>
+            <if test="params.teamId != null and params.teamId != '' "> AND cu.team_id   =#{params.teamId}</if>
+
+            <if test="params.uName != null  and  params.uName != ''"> AND cu.name  LIKE CONCAT('%', #{params.uName}, '%') </if>
+
+        </where>
+        ORDER BY ca.attend_date DESC
+    </select>
+
+
+
+
+
+
+
+
+
+    <select id="selectCgAttendanceById" parameterType="Long" resultMap="CgAttendanceResult">
+        <include refid="selectCgAttendanceVo"/>
+        where id = #{id}
+    </select>
+
+    <insert id="insertCgAttendance" parameterType="CgAttendance">
+        insert into cg_attendance
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="id != null">id,</if>
+            <if test="uId != null">u_id,</if>
+            <if test="attendDate != null">attend_date,</if>
+            <if test="checkIn != null">check_in,</if>
+            <if test="checkOut != null">check_out,</if>
+
+            <if test="checkInId != null">check_in_id,</if>
+            <if test="checkOutId != null">check_out_id,</if>
+            <if test="kSecont != null">k_secont,</if>
+            <if test="status != null">status,</if>
+            <if test="overtimeHours != null">overtime_hours,</if>
+            <if test="weekNum != null">week_num,</if>
+            <if test="remark != null">remark,</if>
+            <if test="createTime != null">create_time,</if>
+            <if test="updateTime != null">update_time,</if>
+        </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="id != null">#{id},</if>
+            <if test="uId != null">#{uId},</if>
+            <if test="attendDate != null">#{attendDate},</if>
+            <if test="checkIn != null">#{checkIn},</if>
+            <if test="checkOut != null">#{checkOut},</if>
+
+            <if test="checkInId != null">#{checkInId},</if>
+            <if test="checkOutId != null">#{checkOutId},</if>
+            <if test="kSecont != null">#{kSecont},</if>
+            <if test="status != null">#{status},</if>
+            <if test="overtimeHours != null">#{overtimeHours},</if>
+            <if test="weekNum != null">#{weekNum},</if>
+            <if test="remark != null">#{remark},</if>
+            <if test="createTime != null">#{createTime},</if>
+            <if test="updateTime != null">#{updateTime},</if>
+        </trim>
+    </insert>
+
+    <update id="updateCgAttendance" parameterType="CgAttendance">
+        update cg_attendance
+        <trim prefix="SET" suffixOverrides=",">
+            <if test="uId != null">u_id = #{uId},</if>
+            <if test="attendDate != null">attend_date = #{attendDate},</if>
+            <if test="checkIn != null">check_in = #{checkIn},</if>
+            <if test="checkOut != null">check_out = #{checkOut},</if>
+
+            <if test="checkInId != null">check_in_id = #{checkInId},</if>
+            <if test="checkOutId != null">check_out_id = #{checkOutId},</if>
+            <if test="kSecont != null">k_secont = #{kSecont},</if>
+            <if test="status != null">status = #{status},</if>
+            <if test="overtimeHours != null">overtime_hours = #{overtimeHours},</if>
+            <if test="weekNum != null">week_num = #{weekNum},</if>
+            <if test="remark != null">remark = #{remark},</if>
+            <if test="createTime != null">create_time = #{createTime},</if>
+            <if test="updateTime != null">update_time = #{updateTime},</if>
+        </trim>
+        where id = #{id}
+    </update>
+
+    <delete id="deleteCgAttendanceById" parameterType="Long">
+        delete from cg_attendance where id = #{id}
+    </delete>
+
+    <delete id="deleteCgAttendanceByIds" parameterType="String">
+        delete from cg_attendance where id in
+        <foreach item="id" collection="array" open="(" separator="," close=")">
+            #{id}
+        </foreach>
+    </delete>
+</mapper>

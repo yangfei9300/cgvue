@@ -1,0 +1,86 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.ruoyi.CgPHszs.mapper.CgPHszsMapper">
+    
+    <resultMap type="CgPHszs" id="CgPHszsResult">
+        <result property="id"    column="id"    />
+        <result property="dui1"    column="dui1"    />
+        <result property="dui2"    column="dui2"    />
+        <result property="dui3"    column="dui3"    />
+        <result property="dui4"    column="dui4"    />
+        <result property="dui5"    column="dui5"    />
+        <result property="dui6"    column="dui6"    />
+        <result property="zhishu"    column="zhishu"    />
+    </resultMap>
+
+    <sql id="selectCgPHszsVo">
+        select id, dui1, dui2, dui3, dui4, dui5, dui6, zhishu from cg_p_hszs
+    </sql>
+
+    <select id="selectCgPHszsList" parameterType="CgPHszs" resultMap="CgPHszsResult">
+        <include refid="selectCgPHszsVo"/>
+        <where>  
+            <if test="dui1 != null  and dui1 != ''"> and dui1 = #{dui1}</if>
+            <if test="dui2 != null  and dui2 != ''"> and dui2 = #{dui2}</if>
+            <if test="dui3 != null  and dui3 != ''"> and dui3 = #{dui3}</if>
+            <if test="dui4 != null  and dui4 != ''"> and dui4 = #{dui4}</if>
+            <if test="dui5 != null  and dui5 != ''"> and dui5 = #{dui5}</if>
+            <if test="dui6 != null  and dui6 != ''"> and dui6 = #{dui6}</if>
+            <if test="zhishu != null  and zhishu != ''"> and zhishu = #{zhishu}</if>
+        </where>
+    </select>
+    
+    <select id="selectCgPHszsById" parameterType="Long" resultMap="CgPHszsResult">
+        <include refid="selectCgPHszsVo"/>
+        where id = #{id}
+    </select>
+
+    <insert id="insertCgPHszs" parameterType="CgPHszs" useGeneratedKeys="true" keyProperty="id">
+        insert into cg_p_hszs
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="dui1 != null">dui1,</if>
+            <if test="dui2 != null">dui2,</if>
+            <if test="dui3 != null">dui3,</if>
+            <if test="dui4 != null">dui4,</if>
+            <if test="dui5 != null">dui5,</if>
+            <if test="dui6 != null">dui6,</if>
+            <if test="zhishu != null">zhishu,</if>
+         </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="dui1 != null">#{dui1},</if>
+            <if test="dui2 != null">#{dui2},</if>
+            <if test="dui3 != null">#{dui3},</if>
+            <if test="dui4 != null">#{dui4},</if>
+            <if test="dui5 != null">#{dui5},</if>
+            <if test="dui6 != null">#{dui6},</if>
+            <if test="zhishu != null">#{zhishu},</if>
+         </trim>
+    </insert>
+
+    <update id="updateCgPHszs" parameterType="CgPHszs">
+        update cg_p_hszs
+        <trim prefix="SET" suffixOverrides=",">
+            <if test="dui1 != null">dui1 = #{dui1},</if>
+            <if test="dui2 != null">dui2 = #{dui2},</if>
+            <if test="dui3 != null">dui3 = #{dui3},</if>
+            <if test="dui4 != null">dui4 = #{dui4},</if>
+            <if test="dui5 != null">dui5 = #{dui5},</if>
+            <if test="dui6 != null">dui6 = #{dui6},</if>
+            <if test="zhishu != null">zhishu = #{zhishu},</if>
+        </trim>
+        where id = #{id}
+    </update>
+
+    <delete id="deleteCgPHszsById" parameterType="Long">
+        delete from cg_p_hszs where id = #{id}
+    </delete>
+
+    <delete id="deleteCgPHszsByIds" parameterType="String">
+        delete from cg_p_hszs where id in 
+        <foreach item="id" collection="array" open="(" separator="," close=")">
+            #{id}
+        </foreach>
+    </delete>
+</mapper>

@@ -1,0 +1,149 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.ruoyi.CgHeartShi.mapper.CgHeartShiMapper">
+    
+    <resultMap type="CgHeartShi" id="CgHeartShiResult">
+        <result property="id"    column="id"    />
+        <result property="title"    column="title"    />
+        <result property="content"    column="content"    />
+        <result property="imgs"    column="imgs"    />
+        <result property="lat"    column="lat"    />
+        <result property="lng"    column="lng"    />
+        <result property="dId"    column="d_id"    />
+        <result property="uId"    column="u_id"    />
+        <result property="fen"    column="fen"    />
+        <result property="remark"    column="remark"    />
+        <result property="fenTime"    column="fen_time"    />
+        <result property="createTime"    column="create_time"    />
+        <result property="updateTime"    column="update_time"    />
+        <result property="params.tName"    column="t_name"    />
+        <result property="params.uName"    column="uName"    />
+
+
+
+
+    </resultMap>
+
+    <sql id="selectCgHeartShiVo">
+        select id, title, content, imgs, lat, lng, d_id, u_id, fen, remark, fen_time, create_time, update_time from cg_heart_shi
+    </sql>
+
+    <select id="selectCgHeartShiList" parameterType="CgHeartShi" resultMap="CgHeartShiResult">
+        <include refid="selectCgHeartShiVo"/>
+        <where>
+            <if test="title != null  and title != ''"> and title like concat('%', #{title}, '%')</if>
+            <if test="content != null  and content != ''"> and content like concat('%', #{content}, '%')</if>
+            <if test="imgs != null  and imgs != ''"> and imgs = #{imgs}</if>
+            <if test="lat != null  and lat != ''"> and lat = #{lat}</if>
+            <if test="lng != null  and lng != ''"> and lng = #{lng}</if>
+            <if test="dId != null "> and d_id = #{dId}</if>
+            <if test="uId != null "> and u_id = #{uId}</if>
+            <if test="fen != null "> and fen = #{fen}</if>
+            <if test="fenTime != null "> and fen_time = #{fenTime}</if>
+        </where>
+
+    </select>
+
+
+    <select id="getMyHrhs"  parameterType="CgHeartShi" resultMap="CgHeartShiResult">
+        SELECT
+            chs.*,
+            ct.t_name
+        FROM
+            cg_heart_shi chs
+                LEFT JOIN cg_team ct ON chs.d_id = ct.id
+        WHERE
+            u_id = #{uId}
+        ORDER BY chs.create_time DESC
+
+    </select>
+
+<!--    后台用-->
+    <select  id="getHearts"  parameterType="CgHeartShi" resultMap="CgHeartShiResult">
+        SELECT
+        chs.*,
+        cu.`name` as uName,
+        ct.t_name
+        FROM
+        cg_heart_shi chs
+        LEFT JOIN cg_user cu ON chs.u_id = cu.id
+        LEFT JOIN cg_team ct ON chs.d_id = ct.id
+        <where>
+            <if test="title != null  and title != ''"> and chs.title like concat('%', #{title}, '%')</if>
+            <if test="content != null  and content != ''"> and chs.titlecontent like concat('%', #{content}, '%')</if>
+            <if test="params.uName != null and params.uName != '' "> and cu.`name` like concat('%', #{params.uName}, '%')  </if>
+            <if test="dId != null  "> and chs.d_id=#{dId}  </if>
+        </where>
+        ORDER BY chs.create_time DESC
+    </select>
+
+    
+    <select id="selectCgHeartShiById" parameterType="Long" resultMap="CgHeartShiResult">
+        <include refid="selectCgHeartShiVo"/>
+        where id = #{id}
+    </select>
+
+    <insert id="insertCgHeartShi" parameterType="CgHeartShi" useGeneratedKeys="true" keyProperty="id">
+        insert into cg_heart_shi
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="title != null">title,</if>
+            <if test="content != null">content,</if>
+            <if test="imgs != null">imgs,</if>
+            <if test="lat != null">lat,</if>
+            <if test="lng != null">lng,</if>
+            <if test="dId != null">d_id,</if>
+            <if test="uId != null">u_id,</if>
+            <if test="fen != null">fen,</if>
+            <if test="remark != null">remark,</if>
+            <if test="fenTime != null">fen_time,</if>
+            <if test="createTime != null">create_time,</if>
+            <if test="updateTime != null">update_time,</if>
+         </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="title != null">#{title},</if>
+            <if test="content != null">#{content},</if>
+            <if test="imgs != null">#{imgs},</if>
+            <if test="lat != null">#{lat},</if>
+            <if test="lng != null">#{lng},</if>
+            <if test="dId != null">#{dId},</if>
+            <if test="uId != null">#{uId},</if>
+            <if test="fen != null">#{fen},</if>
+            <if test="remark != null">#{remark},</if>
+            <if test="fenTime != null">#{fenTime},</if>
+            <if test="createTime != null">#{createTime},</if>
+            <if test="updateTime != null">#{updateTime},</if>
+         </trim>
+    </insert>
+
+    <update id="updateCgHeartShi" parameterType="CgHeartShi">
+        update cg_heart_shi
+        <trim prefix="SET" suffixOverrides=",">
+            <if test="title != null">title = #{title},</if>
+            <if test="content != null">content = #{content},</if>
+            <if test="imgs != null">imgs = #{imgs},</if>
+            <if test="lat != null">lat = #{lat},</if>
+            <if test="lng != null">lng = #{lng},</if>
+            <if test="dId != null">d_id = #{dId},</if>
+            <if test="uId != null">u_id = #{uId},</if>
+            <if test="fen != null">fen = #{fen},</if>
+            <if test="remark != null">remark = #{remark},</if>
+            <if test="fenTime != null">fen_time = #{fenTime},</if>
+            <if test="createTime != null">create_time = #{createTime},</if>
+            <if test="updateTime != null">update_time = #{updateTime},</if>
+        </trim>
+        where id = #{id}
+    </update>
+
+    <delete id="deleteCgHeartShiById" parameterType="Long">
+        delete from cg_heart_shi where id = #{id}
+    </delete>
+
+    <delete id="deleteCgHeartShiByIds" parameterType="String">
+        delete from cg_heart_shi where id in 
+        <foreach item="id" collection="array" open="(" separator="," close=")">
+            #{id}
+        </foreach>
+    </delete>
+</mapper>

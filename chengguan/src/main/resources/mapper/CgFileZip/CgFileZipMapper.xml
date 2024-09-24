@@ -1,0 +1,71 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.ruoyi.CgFileZip.mapper.CgFileZipMapper">
+    
+    <resultMap type="CgFileZip" id="CgFileZipResult">
+        <result property="id"    column="id"    />
+        <result property="filename"    column="filename"    />
+        <result property="fileAddress"    column="file_address"    />
+        <result property="remark"    column="remark"    />
+        <result property="createTime"    column="create_time"    />
+    </resultMap>
+
+    <sql id="selectCgFileZipVo">
+        select id, filename, file_address, remark, create_time from cg_file_zip
+    </sql>
+
+    <select id="selectCgFileZipList" parameterType="CgFileZip" resultMap="CgFileZipResult">
+        <include refid="selectCgFileZipVo"/>
+        <where>  
+            <if test="filename != null  and filename != ''"> and filename like concat('%', #{filename}, '%')</if>
+            <if test="fileAddress != null  and fileAddress != ''"> and file_address = #{fileAddress}</if>
+        </where>
+    </select>
+    
+    <select id="selectCgFileZipById" parameterType="Long" resultMap="CgFileZipResult">
+        <include refid="selectCgFileZipVo"/>
+        where id = #{id}
+    </select>
+
+    <insert id="insertCgFileZip" parameterType="CgFileZip">
+        insert into cg_file_zip
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="id != null">id,</if>
+            <if test="filename != null">filename,</if>
+            <if test="fileAddress != null">file_address,</if>
+            <if test="remark != null">remark,</if>
+            <if test="createTime != null">create_time,</if>
+         </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="id != null">#{id},</if>
+            <if test="filename != null">#{filename},</if>
+            <if test="fileAddress != null">#{fileAddress},</if>
+            <if test="remark != null">#{remark},</if>
+            <if test="createTime != null">#{createTime},</if>
+         </trim>
+    </insert>
+
+    <update id="updateCgFileZip" parameterType="CgFileZip">
+        update cg_file_zip
+        <trim prefix="SET" suffixOverrides=",">
+            <if test="filename != null">filename = #{filename},</if>
+            <if test="fileAddress != null">file_address = #{fileAddress},</if>
+            <if test="remark != null">remark = #{remark},</if>
+            <if test="createTime != null">create_time = #{createTime},</if>
+        </trim>
+        where id = #{id}
+    </update>
+
+    <delete id="deleteCgFileZipById" parameterType="Long">
+        delete from cg_file_zip where id = #{id}
+    </delete>
+
+    <delete id="deleteCgFileZipByIds" parameterType="String">
+        delete from cg_file_zip where id in 
+        <foreach item="id" collection="array" open="(" separator="," close=")">
+            #{id}
+        </foreach>
+    </delete>
+</mapper>

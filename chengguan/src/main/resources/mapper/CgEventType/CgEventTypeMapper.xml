@@ -1,0 +1,78 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.ruoyi.CgEventType.mapper.CgEventTypeMapper">
+    
+    <resultMap type="CgEventType" id="CgEventTypeResult">
+        <result property="id"    column="id"    />
+        <result property="name"    column="name"    />
+        <result property="type"    column="type"    />
+        <result property="numDay"    column="num_day"    />
+        <result property="createTime"    column="create_time"    />
+        <result property="updateTime"    column="update_time"    />
+    </resultMap>
+
+    <sql id="selectCgEventTypeVo">
+        select id, name, type, num_day, create_time, update_time from cg_event_type
+    </sql>
+
+    <select id="selectCgEventTypeList" parameterType="CgEventType" resultMap="CgEventTypeResult">
+        <include refid="selectCgEventTypeVo"/>
+        <where>  
+            <if test="name != null  and name != ''"> and name like concat('%', #{name}, '%')</if>
+            <if test="type != null  and type != ''"> and type = #{type}</if>
+            <if test="numDay != null "> and num_day = #{numDay}</if>
+        </where>
+    </select>
+    
+    <select id="selectCgEventTypeById" parameterType="Long" resultMap="CgEventTypeResult">
+        <include refid="selectCgEventTypeVo"/>
+        where id = #{id}
+    </select>
+
+    <insert id="insertCgEventType" parameterType="CgEventType"
+            useGeneratedKeys="true" keyProperty="id"
+    >
+        insert into cg_event_type
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="id != null">id,</if>
+            <if test="name != null">name,</if>
+            <if test="type != null">type,</if>
+            <if test="numDay != null">num_day,</if>
+            <if test="createTime != null">create_time,</if>
+            <if test="updateTime != null">update_time,</if>
+         </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="id != null">#{id},</if>
+            <if test="name != null">#{name},</if>
+            <if test="type != null">#{type},</if>
+            <if test="numDay != null">#{numDay},</if>
+            <if test="createTime != null">#{createTime},</if>
+            <if test="updateTime != null">#{updateTime},</if>
+         </trim>
+    </insert>
+
+    <update id="updateCgEventType" parameterType="CgEventType">
+        update cg_event_type
+        <trim prefix="SET" suffixOverrides=",">
+            <if test="name != null">name = #{name},</if>
+            <if test="type != null">type = #{type},</if>
+            <if test="numDay != null">num_day = #{numDay},</if>
+            <if test="createTime != null">create_time = #{createTime},</if>
+            <if test="updateTime != null">update_time = #{updateTime},</if>
+        </trim>
+        where id = #{id}
+    </update>
+
+    <delete id="deleteCgEventTypeById" parameterType="Long">
+        delete from cg_event_type where id = #{id}
+    </delete>
+
+    <delete id="deleteCgEventTypeByIds" parameterType="String">
+        delete from cg_event_type where id in 
+        <foreach item="id" collection="array" open="(" separator="," close=")">
+            #{id}
+        </foreach>
+    </delete>
+</mapper>

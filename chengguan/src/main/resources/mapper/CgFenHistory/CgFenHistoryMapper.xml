@@ -1,0 +1,137 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.ruoyi.CgFenHistory.mapper.CgFenHistoryMapper">
+
+    <resultMap type="CgFenHistory" id="CgFenHistoryResult">
+        <result property="id"    column="id"    />
+        <result property="uId"    column="u_id"    />
+        <result property="fen"    column="fen"    />
+        <result property="fenType"    column="fen_type"    />
+        <result property="remark"    column="remark"    />
+        <result property="name"    column="name"    />
+        <result property="createTime"    column="create_time"    />
+        <result property="updateTime"    column="update_time"    />
+
+        <result property="params.user_name"    column="user_name"    />
+        <result property="params.final_fen"    column="final_fen"    />
+
+
+
+
+    </resultMap>
+
+    <sql id="selectCgFenHistoryVo">
+        select id, u_id, fen, fen_type, remark, create_time, update_time from cg_fen_history
+    </sql>
+
+    <select id="selectCgFenHistoryList" parameterType="CgFenHistory" resultMap="CgFenHistoryResult">
+        <include refid="selectCgFenHistoryVo"/>
+        <where>
+            <if test="uId != null "> and u_id = #{uId}</if>
+            <if test="fenType != null  and fenType != ''"> and fen_type = #{fenType}</if>
+            <if test="params.ct != null  and fenType != ''"> and  create_time like  concat('%',#{params.ct}, '%') </if>
+        </where>
+        ORDER BY
+        h.create_time DESC;
+    </select>
+
+
+    <select id="selectCgFenHistoryList1" parameterType="CgFenHistory" resultMap="CgFenHistoryResult">
+        SELECT
+            h.id,
+            h.u_id,
+            h.fen,
+            h.fen_type,
+            h.remark,
+            h.create_time,
+            h.update_time,
+            u.name as user_name,
+            u.name as name
+        FROM
+            cg_fen_history h
+                JOIN
+            cg_user u
+            ON
+                h.u_id = u.id
+
+        <where>
+            <if test="uId != null "> and u_id = #{uId}</if>
+            <if test="fenType != null  and fenType != ''"> and fen_type = #{fenType}</if>
+            <if test="params.ct != null  and fenType != ''"> and  create_time like  concat('%',#{params.ct}, '%') </if>
+            <if test="params.name != null  and fenType != ''"> and  u.name like  concat('%',#{params.name}, '%') </if>
+            <if test="params.createTime != null "> and  h.create_time like  concat('%',#{params.createTime}, '%') </if>
+        </where>
+        ORDER BY
+        h.create_time DESC
+    </select>
+
+
+
+    <select id="getMonthFens" parameterType="CgFenHistory" resultMap="CgFenHistoryResult">
+        SELECT
+            u.id AS u_id,
+            u.name AS user_name,
+            COALESCE(25 + SUM(f.fen), 25) AS final_fen
+        FROM
+            cg_user u
+                LEFT JOIN
+            cg_fen_history f
+            ON
+                        u.id = f.u_id
+                    AND YEAR(f.create_time) = #{params.year}
+            AND MONTH(f.create_time) = #{params.month}
+        GROUP BY
+            u.id
+    </select>
+
+    <select id="selectCgFenHistoryById" parameterType="Long" resultMap="CgFenHistoryResult">
+        <include refid="selectCgFenHistoryVo"/>
+        where id = #{id}
+    </select>
+
+    <insert id="insertCgFenHistory" parameterType="CgFenHistory">
+        insert into cg_fen_history
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="uId != null">u_id,</if>
+            <if test="fen != null">fen,</if>
+            <if test="fenType != null">fen_type,</if>
+            <if test="remark != null">remark,</if>
+            <if test="createTime != null">create_time,</if>
+            <if test="updateTime != null">update_time,</if>
+        </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="uId != null">#{uId},</if>
+            <if test="fen != null">#{fen},</if>
+            <if test="fenType != null">#{fenType},</if>
+            <if test="remark != null">#{remark},</if>
+            <if test="createTime != null">#{createTime},</if>
+            <if test="updateTime != null">#{updateTime},</if>
+        </trim>
+    </insert>
+
+    <update id="updateCgFenHistory" parameterType="CgFenHistory">
+        update cg_fen_history
+        <trim prefix="SET" suffixOverrides=",">
+            <if test="uId != null">u_id = #{uId},</if>
+            <if test="fen != null">fen = #{fen},</if>
+            <if test="fenType != null">fen_type = #{fenType},</if>
+            <if test="remark != null">remark = #{remark},</if>
+            <if test="createTime != null">create_time = #{createTime},</if>
+            <if test="updateTime != null">update_time = #{updateTime},</if>
+        </trim>
+        where id = #{id}
+    </update>
+
+    <delete id="deleteCgFenHistoryById" parameterType="Long">
+        delete from cg_fen_history where id = #{id}
+    </delete>
+
+    <delete id="deleteCgFenHistoryByIds" parameterType="String">
+        delete from cg_fen_history where id in
+        <foreach item="id" collection="array" open="(" separator="," close=")">
+            #{id}
+        </foreach>
+    </delete>
+</mapper>

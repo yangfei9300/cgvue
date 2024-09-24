@@ -1,0 +1,363 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.ruoyi.CgTreatDoMat.mapper.CgTreatDoMatMapper">
+    
+    <resultMap type="CgTreatDoMat" id="CgTreatDoMatResult">
+        <result property="id"    column="id"    />
+        <result property="type"    column="type"    />
+        <result property="title"    column="title"    />
+        <result property="content"    column="content"    />
+        <result property="imgs"    column="imgs"    />
+        <result property="endTime"    column="end_time"    />
+        <result property="remark"    column="remark"    />
+        <result property="lng"    column="lng"    />
+        <result property="lat"    column="lat"    />
+        <result property="tTId"    column="t_t_id"    />
+        <result property="uTId"    column="u_t_id"    />
+        <result property="cTId"    column="c_t_id"    />
+        <result property="cUId"    column="c_u_id"    />
+        <result property="resultContent"    column="result_content"    />
+        <result property="resultImgs"    column="result_imgs"    />
+        <result property="resultStartTime"    column="result_start_time"    />
+        <result property="resultEndTime"    column="result_end_time"    />
+        <result property="fenNum"    column="fen_num"    />
+        <result property="fenTime"    column="fen_time"    />
+        <result property="wanTime"    column="wan_time"    />
+        <result property="fenRemark"    column="fen_remark"    />
+        <result property="status"    column="status"    />
+        <result property="typePt"    column="type_pt"    />
+        <result property="weizhi"    column="weizhi"    />
+        <result property="pCode"    column="p_code"    />
+        <result property="createTime"    column="create_time"    />
+        <result property="updateTime"    column="update_time"    />
+        <result property="params.tuname"    column="tuname"    />
+        <result property="params.ttname"    column="ttname"    />
+        <result property="params.tphone"    column="tphone"    />
+        <result property="params.cuphone"    column="cuphone"    />
+
+        <result property="params.cuname"    column="cuname"    />
+        <result property="params.ctname"    column="ctname"    />
+        <result property="params.type_name"    column="type_name"    />
+
+
+        <result property="params.name"    column="name"    />
+        <result property="params.total"    column="total"    />
+        <result property="params.result_total"    column="result_total"    />
+
+    </resultMap>
+
+    <sql id="selectCgTreatDoMatVo">
+        select id, type, title, content, imgs, end_time, remark, lng, lat,
+               t_t_id, u_t_id, c_t_id, c_u_id, result_content,
+               result_imgs, result_start_time, result_end_time, fen_num,
+               fen_time, wan_time, fen_remark, status, create_time,
+               update_time,type_pt,weizhi,p_code
+        from cg_treat_do_mat
+    </sql>
+
+    <select id="selectCgTreatDoMatList" parameterType="CgTreatDoMat" resultMap="CgTreatDoMatResult">
+        <include refid="selectCgTreatDoMatVo"/>
+        <where>  
+            <if test="type != null "> and type = #{type}</if>
+            <if test="title != null  and title != ''"> and title like concat('%', #{title}, '%')</if>
+            <if test="content != null  and content != ''"> and content like concat('%', #{content}, '%')</if>
+            <if test="imgs != null  and imgs != ''"> and imgs = #{imgs}</if>
+            <if test="endTime != null "> and end_time = #{endTime}</if>
+            <if test="lng != null "> and lng = #{lng}</if>
+            <if test="lat != null "> and lat = #{lat}</if>
+            <if test="tTId != null "> and t_t_id = #{tTId}</if>
+            <if test="uTId != null "> and u_t_id = #{uTId}</if>
+            <if test="cTId != null "> and c_t_id = #{cTId}</if>
+            <if test="cUId != null "> and c_u_id = #{cUId}</if>
+            <if test="resultContent != null  and resultContent != ''"> and result_content = #{resultContent}</if>
+            <if test="resultImgs != null  and resultImgs != ''"> and result_imgs = #{resultImgs}</if>
+            <if test="resultStartTime != null "> and result_start_time = #{resultStartTime}</if>
+            <if test="resultEndTime != null "> and result_end_time = #{resultEndTime}</if>
+            <if test="fenTime != null "> and fen_time = #{fenTime}</if>
+            <if test="wanTime != null "> and wan_time = #{wanTime}</if>
+            <if test="fenRemark != null  and fenRemark != ''"> and fen_remark = #{fenRemark}</if>
+            <if test="status != null "> and status = #{status}</if>
+
+            <if test="typePt != null "> and type_pt = #{typePt}</if>
+            <if test="weizhi != null "> and weizhi = #{weizhi}</if>
+            <if test="pCode != null  and pCode != ''"> and p_code  like concat('%', #{pCode}, '%') </if>
+        </where>
+    </select>
+
+
+    <select id="gettotalfenMonth" parameterType="CgTreatDoMat" resultMap="CgTreatDoMatResult">
+        SELECT
+            cu.id AS u_id,
+            cu.name AS name,
+            COALESCE(SUM(ctdm.fen_num), 0) AS total,
+            COALESCE(SUM(ctdm.fen_num), 0) + 25 AS result_total
+        FROM
+            cg_user cu
+                LEFT JOIN
+            cg_treat_do_mat ctdm ON cu.id = ctdm.u_t_id
+        WHERE
+            ctdm.create_time IS NULL OR ctdm.create_time LIKE  concat('%', #{params.seldate}, '%')
+        GROUP BY
+            cu.id, cu.name;
+    </select>
+
+
+
+
+
+
+
+    <select id="getShijianList" parameterType="CgTreatDoMat" resultMap="CgTreatDoMatResult">
+        SELECT
+        ctdm.id,
+        ctdm.type,
+        ctdm.title,
+        ctdm.content,
+        ctdm.imgs,
+        ctdm.end_time,
+        ctdm.remark,
+        ctdm.lng,
+        ctdm.lat,
+        ctdm.p_code,
+        ctdm.t_t_id,
+        ctdm.u_t_id,
+        ctdm.c_t_id,
+        ctdm.c_u_id,
+        ctdm.result_content,
+        ctdm.result_imgs,
+        ctdm.result_start_time,
+        ctdm.result_end_time,
+        ctdm.fen_num,
+        ctdm.fen_time,
+
+        ctdm.type_pt,
+        ctdm.weizhi,
+
+        ctdm.wan_time,
+        ctdm.fen_remark,
+        ctdm.STATUS,
+        ctdm.create_time,
+        ctdm.update_time,
+        cu.NAME AS tuname,
+        ct.t_name AS ttname,
+        cu.phone tphone,
+
+
+        cu1.NAME AS cuname,
+        ct2.t_name AS ctname,
+        cu1.phone cuphone,
+        cet.name type_name
+
+        FROM
+        cg_treat_do_mat ctdm
+
+        LEFT JOIN cg_event_type cet ON cet.id = ctdm.type
+
+        LEFT JOIN cg_user cu ON cu.id = ctdm.u_t_id
+
+        LEFT JOIN cg_team ct ON ct.id = ctdm.t_t_id
+
+        LEFT JOIN cg_user cu1 ON cu1.id = ctdm.c_u_id
+
+        LEFT JOIN cg_team ct2 ON ct2.id = ctdm.c_t_id
+        <where>
+            <if test="type != null "> and ctdm.type = #{type}</if>
+            <if test="title != null  and title != ''"> and ctdm.title = #{title}</if>
+            <if test="content != null  and content != ''"> and ctdm.content = #{content}</if>
+            <if test="imgs != null  and imgs != ''"> and ctdm.imgs = #{imgs}</if>
+            <if test="endTime != null "> and ctdm.end_time = #{endTime}</if>
+            <if test="lng != null "> and ctdm.lng = #{lng}</if>
+            <if test="lat != null "> and ctdm.lat = #{lat}</if>
+            <if test="tTId != null "> and ctdm.t_t_id = #{tTId}</if>
+            <if test="uTId != null "> and ctdm.u_t_id = #{uTId}</if>
+            <if test="cTId != null "> and ctdm.c_t_id = #{cTId}</if>
+            <if test="cUId != null "> and ctdm.c_u_id = #{cUId}</if>
+            <if test="resultContent != null  and resultContent != ''"> and ctdm.result_content = #{resultContent}</if>
+            <if test="resultImgs != null  and resultImgs != ''"> and ctdm.result_imgs = #{resultImgs}</if>
+            <if test="resultStartTime != null "> and ctdm.result_start_time = #{resultStartTime}</if>
+            <if test="resultEndTime != null "> and ctdm.result_end_time = #{resultEndTime}</if>
+            <if test="fenTime != null "> and ctdm.fen_time = #{fenTime}</if>
+            <if test="wanTime != null "> and ctdm.wan_time = #{wanTime}</if>
+            <if test="fenRemark != null  and fenRemark != ''"> and ctdm.fen_remark = #{fenRemark}</if>
+            <if test="status != null "> and ctdm.status = #{status}</if>
+            <if test="params.status ==11  "> and ctdm.status != 4</if>
+
+            <if test="params.status1 =='3_4'"> and (ctdm.status = 4 or ctdm.status = 3)</if>
+
+            <if test="pCode != null  and pCode != ''"> and ctdm.p_code  like concat('%', #{pCode}, '%') </if>
+
+            <if test="params.tName !=null and params.tName !=''  "> and cu.NAME    like concat('%', #{params.tName}, '%')    </if>
+            <if test="params.cName !=null and params.cName !=''  "> and cu1.NAME    like concat('%', #{params.cName}, '%')    </if>
+
+        </where>
+        ORDER BY ctdm.create_time DESC
+
+
+    </select>
+
+
+
+    
+    <select id="selectCgTreatDoMatById" parameterType="Long" resultMap="CgTreatDoMatResult">
+<!--        <include refid="selectCgTreatDoMatVo"/>-->
+<!--        where id = #{id}-->
+
+
+        SELECT
+        ctdm.id,
+        ctdm.type,
+        ctdm.title,
+        ctdm.content,
+        ctdm.imgs,
+        ctdm.type_pt,
+        ctdm.weizhi,
+        ctdm.end_time,
+        ctdm.remark,
+        ctdm.lng,
+        ctdm.lat,
+        ctdm.t_t_id,
+        ctdm.u_t_id,
+        ctdm.c_t_id,
+        ctdm.c_u_id,
+        ctdm.result_content,
+        ctdm.result_imgs,
+        ctdm.result_start_time,
+        ctdm.result_end_time,
+        ctdm.fen_num,
+        ctdm.fen_time,
+        ctdm.wan_time,
+        ctdm.fen_remark,
+        ctdm.STATUS,
+        ctdm.create_time,
+        ctdm.update_time,
+        cu.NAME AS tuname,
+        ct.t_name AS ttname,
+        cu.phone tphone,
+
+
+        cu1.NAME AS cuname,
+        ct2.t_name AS ctname,
+        cu1.phone cuphone,
+        cet.name type_name
+
+        FROM
+        cg_treat_do_mat ctdm
+
+        LEFT JOIN cg_event_type cet ON cet.id = ctdm.type
+        LEFT JOIN cg_user cu ON cu.id = ctdm.u_t_id
+        LEFT JOIN cg_team ct ON ct.id = ctdm.t_t_id
+        LEFT JOIN cg_user cu1 ON cu1.id = ctdm.c_u_id
+        LEFT JOIN cg_team ct2 ON ct2.id = ctdm.c_t_id
+        where ctdm.id = #{id}
+
+    </select>
+
+    <insert id="insertCgTreatDoMat" parameterType="CgTreatDoMat" useGeneratedKeys="true" keyProperty="id">
+        insert into cg_treat_do_mat
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="type != null">type,</if>
+            <if test="title != null">title,</if>
+            <if test="content != null">content,</if>
+            <if test="imgs != null">imgs,</if>
+            <if test="endTime != null">end_time,</if>
+            <if test="remark != null">remark,</if>
+            <if test="lng != null">lng,</if>
+            <if test="lat != null">lat,</if>
+            <if test="tTId != null">t_t_id,</if>
+            <if test="uTId != null">u_t_id,</if>
+            <if test="cTId != null">c_t_id,</if>
+            <if test="cUId != null">c_u_id,</if>
+            <if test="resultContent != null">result_content,</if>
+            <if test="resultImgs != null">result_imgs,</if>
+            <if test="resultStartTime != null">result_start_time,</if>
+            <if test="resultEndTime != null">result_end_time,</if>
+            <if test="fenNum != null">fen_num,</if>
+            <if test="fenTime != null">fen_time,</if>
+            <if test="wanTime != null">wan_time,</if>
+            <if test="fenRemark != null">fen_remark,</if>
+            <if test="status != null">status,</if>
+
+            <if test="typePt != null">type_pt,</if>
+            <if test="weizhi != null">weizhi,</if>
+            <if test="pCode != null">p_code,</if>
+            <if test="createTime != null">create_time,</if>
+            <if test="updateTime != null">update_time,</if>
+         </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="type != null">#{type},</if>
+            <if test="title != null">#{title},</if>
+            <if test="content != null">#{content},</if>
+            <if test="imgs != null">#{imgs},</if>
+            <if test="endTime != null">#{endTime},</if>
+            <if test="remark != null">#{remark},</if>
+            <if test="lng != null">#{lng},</if>
+            <if test="lat != null">#{lat},</if>
+            <if test="tTId != null">#{tTId},</if>
+            <if test="uTId != null">#{uTId},</if>
+            <if test="cTId != null">#{cTId},</if>
+            <if test="cUId != null">#{cUId},</if>
+            <if test="resultContent != null">#{resultContent},</if>
+            <if test="resultImgs != null">#{resultImgs},</if>
+            <if test="resultStartTime != null">#{resultStartTime},</if>
+            <if test="resultEndTime != null">#{resultEndTime},</if>
+            <if test="fenNum != null">#{fenNum},</if>
+            <if test="fenTime != null">#{fenTime},</if>
+            <if test="wanTime != null">#{wanTime},</if>
+            <if test="fenRemark != null">#{fenRemark},</if>
+            <if test="status != null">#{status},</if>
+
+            <if test="typePt != null">#{typePt},</if>
+            <if test="weizhi != null">#{weizhi},</if>
+            <if test="pCode != null">#{pCode},</if>
+            <if test="createTime != null">#{createTime},</if>
+            <if test="updateTime != null">#{updateTime},</if>
+         </trim>
+    </insert>
+
+    <update id="updateCgTreatDoMat" parameterType="CgTreatDoMat">
+        update cg_treat_do_mat
+        <trim prefix="SET" suffixOverrides=",">
+            <if test="type != null">type = #{type},</if>
+            <if test="title != null">title = #{title},</if>
+            <if test="content != null">content = #{content},</if>
+            <if test="imgs != null">imgs = #{imgs},</if>
+            <if test="endTime != null">end_time = #{endTime},</if>
+            <if test="remark != null">remark = #{remark},</if>
+            <if test="lng != null">lng = #{lng},</if>
+            <if test="lat != null">lat = #{lat},</if>
+            <if test="tTId != null">t_t_id = #{tTId},</if>
+            <if test="uTId != null">u_t_id = #{uTId},</if>
+            <if test="cTId != null">c_t_id = #{cTId},</if>
+            <if test="cUId != null">c_u_id = #{cUId},</if>
+            <if test="resultContent != null">result_content = #{resultContent},</if>
+            <if test="resultImgs != null">result_imgs = #{resultImgs},</if>
+            <if test="resultStartTime != null">result_start_time = #{resultStartTime},</if>
+            <if test="resultEndTime != null">result_end_time = #{resultEndTime},</if>
+            <if test="fenNum != null">fen_num = #{fenNum},</if>
+            <if test="fenTime != null">fen_time = #{fenTime},</if>
+            <if test="wanTime != null">wan_time = #{wanTime},</if>
+            <if test="fenRemark != null">fen_remark = #{fenRemark},</if>
+            <if test="status != null">status = #{status},</if>
+
+            <if test="typePt != null">type_pt = #{typePt},</if>
+            <if test="weizhi != null">weizhi = #{weizhi},</if>
+            <if test="pCode != null">p_code = #{pCode},</if>
+            <if test="createTime != null">create_time = #{createTime},</if>
+            <if test="updateTime != null">update_time = #{updateTime},</if>
+        </trim>
+        where id = #{id}
+    </update>
+
+    <delete id="deleteCgTreatDoMatById" parameterType="Long">
+        delete from cg_treat_do_mat where id = #{id}
+    </delete>
+
+    <delete id="deleteCgTreatDoMatByIds" parameterType="String">
+        delete from cg_treat_do_mat where id in 
+        <foreach item="id" collection="array" open="(" separator="," close=")">
+            #{id}
+        </foreach>
+    </delete>
+</mapper>

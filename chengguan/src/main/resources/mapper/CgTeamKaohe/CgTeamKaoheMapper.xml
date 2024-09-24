@@ -1,0 +1,102 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.ruoyi.CgTeamKaohe.mapper.CgTeamKaoheMapper">
+    
+    <resultMap type="CgTeamKaohe" id="CgTeamKaoheResult">
+        <result property="id"    column="id"    />
+        <result property="tId"    column="t_id"    />
+        <result property="tName"    column="t_name"    />
+        <result property="fen1"    column="fen1"    />
+        <result property="fen2"    column="fen2"    />
+        <result property="fen3"    column="fen3"    />
+        <result property="fen4"    column="fen4"    />
+        <result property="month"    column="month"    />
+        <result property="createTime"    column="create_time"    />
+        <result property="updateTime"    column="update_time"    />
+    </resultMap>
+
+    <sql id="selectCgTeamKaoheVo">
+        select id, t_id, t_name, fen1, fen2, fen3, fen4, month, create_time, update_time from cg_team_kaohe
+    </sql>
+
+    <select id="selectCgTeamKaoheList" parameterType="CgTeamKaohe" resultMap="CgTeamKaoheResult">
+        SELECT
+        ctk.id,
+        ctk.t_id,
+        ct.t_name AS t_name,
+        ctk.fen1,
+        ctk.fen2,
+        ctk.fen3,
+        ctk.fen4,
+        ctk.MONTH,
+        ctk.create_time,
+        ctk.update_time
+        FROM
+        cg_team_kaohe ctk
+        LEFT JOIN cg_team ct ON ctk.t_id = ct.id
+        <where>
+            <if test="tName != null  and tName != ''"> and ct.t_name like concat('%', #{tName}, '%')</if>
+            <if test="month != null  and month != ''"> and ctk.month = #{month}</if>
+        </where>
+    </select>
+    
+    <select id="selectCgTeamKaoheById" parameterType="Long" resultMap="CgTeamKaoheResult">
+        <include refid="selectCgTeamKaoheVo"/>
+        where id = #{id}
+    </select>
+
+    <insert id="insertCgTeamKaohe" parameterType="CgTeamKaohe">
+        insert into cg_team_kaohe
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="tId != null">t_id,</if>
+            <if test="tName != null">t_name,</if>
+            <if test="fen1 != null">fen1,</if>
+            <if test="fen2 != null">fen2,</if>
+            <if test="fen3 != null">fen3,</if>
+            <if test="fen4 != null">fen4,</if>
+            <if test="month != null">month,</if>
+            <if test="createTime != null">create_time,</if>
+            <if test="updateTime != null">update_time,</if>
+         </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="tId != null">#{tId},</if>
+            <if test="tName != null">#{tName},</if>
+            <if test="fen1 != null">#{fen1},</if>
+            <if test="fen2 != null">#{fen2},</if>
+            <if test="fen3 != null">#{fen3},</if>
+            <if test="fen4 != null">#{fen4},</if>
+            <if test="month != null">#{month},</if>
+            <if test="createTime != null">#{createTime},</if>
+            <if test="updateTime != null">#{updateTime},</if>
+         </trim>
+    </insert>
+
+    <update id="updateCgTeamKaohe" parameterType="CgTeamKaohe">
+        update cg_team_kaohe
+        <trim prefix="SET" suffixOverrides=",">
+            <if test="tId != null">t_id = #{tId},</if>
+            <if test="tName != null">t_name = #{tName},</if>
+            <if test="fen1 != null">fen1 = #{fen1},</if>
+            <if test="fen2 != null">fen2 = #{fen2},</if>
+            <if test="fen3 != null">fen3 = #{fen3},</if>
+            <if test="fen4 != null">fen4 = #{fen4},</if>
+            <if test="month != null">month = #{month},</if>
+            <if test="createTime != null">create_time = #{createTime},</if>
+            <if test="updateTime != null">update_time = #{updateTime},</if>
+        </trim>
+        where id = #{id}
+    </update>
+
+    <delete id="deleteCgTeamKaoheById" parameterType="Long">
+        delete from cg_team_kaohe where id = #{id}
+    </delete>
+
+    <delete id="deleteCgTeamKaoheByIds" parameterType="String">
+        delete from cg_team_kaohe where id in 
+        <foreach item="id" collection="array" open="(" separator="," close=")">
+            #{id}
+        </foreach>
+    </delete>
+</mapper>
